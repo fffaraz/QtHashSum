@@ -12,7 +12,7 @@ TARGET = HashSum-GUI
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
+SOURCES += gui/main.cpp\
         gui/mainwindow.cpp
 
 HEADERS  += gui/mainwindow.h
