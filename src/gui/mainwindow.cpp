@@ -26,6 +26,8 @@ void MainWindow::on_btnStart_clicked()
     if(!file->exists()) return;
     file->open(QFile::ReadOnly);
 
+    ui->btnStart->setEnabled(false);
+
     chash = new MyCryptographicHash(MyCryptographicHash::Md5);
     connect(chash, SIGNAL(finished()), this, SLOT(chash_finished()));
 
@@ -45,4 +47,5 @@ void MainWindow::chash_finished()
     ui->txtResult->setText(chash->result().toHex());
     chash->deleteLater();
     file->deleteLater();
+    ui->btnStart->setEnabled(true);
 }
