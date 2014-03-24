@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += gui/main.cpp\
-        gui/mainwindow.cpp
+        gui/mainwindow.cpp \
+    mycryptographichash.cpp
 
-HEADERS  += gui/mainwindow.h
+HEADERS  += gui/mainwindow.h \
+    mycryptographichash.h
 
 FORMS    += gui/mainwindow.ui

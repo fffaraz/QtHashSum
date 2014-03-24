@@ -15,4 +15,8 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += cli/main.cpp
+SOURCES += cli/main.cpp \
+    mycryptographichash.cpp
+
+HEADERS += \
+    mycryptographichash.h
