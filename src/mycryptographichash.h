@@ -22,9 +22,10 @@ signals:
 
 private:
     QThread thread;
-    volatile qint64 l1;
-    volatile qint64 l2;
-    volatile bool l3;
+    volatile qint64 totalSize;
+    volatile qint64 readSize;
+    volatile bool isStarted;
+    volatile bool isFinished;
 
 private slots:
     void addDataThread(QIODevice* device);

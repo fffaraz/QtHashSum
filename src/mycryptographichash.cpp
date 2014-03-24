@@ -4,7 +4,7 @@ MyCryptographicHash::MyCryptographicHash(Algorithm method, QObject *parent) :
     QObject(parent),
     QCryptographicHash(method)
 {
-    l1 = l2 = l3 = 0;
+    totalSize = readSize = isStarted = isFinished = 0;
     this->moveToThread(&thread);
     connect(this, SIGNAL(addData(QIODevice*)), this, SLOT(addDataThread(QIODevice*)), Qt::QueuedConnection);
     thread.start();
@@ -17,7 +17,8 @@ MyCryptographicHash::~MyCryptographicHash()
 
 void MyCryptographicHash::reset()
 {
-    l3 = false;
+    if(!isFinished) return;
+    isStarted = false;
     QCryptographicHash::reset();
 }
 
@@ -31,25 +32,26 @@ void MyCryptographicHash::addDataThread(QIODevice* device)
         //return false;
         return;
 
-    l1 = device->size();
-    l2 = 0;
-    l3 = true;
+    totalSize = device->size();
+    readSize = 0;
+    isStarted = true;
 
     char buffer[8 * 1024];
     qint64 length;
 
     while ((length = device->read(buffer,sizeof(buffer))) > 0)
     {
-        l2 += length;
+        readSize += length;
         QCryptographicHash::addData(buffer, length);
     }
 
     //return device->atEnd();
+    isFinished = true;
     emit finished();
 }
 
 double MyCryptographicHash::finishedPercent()
 {
-    if(l3 == false) return 0;
-    return (double)l2/(double)l1;
+    if(isStarted == false) return 0;
+    return (double)readSize/(double)totalSize;
 }
