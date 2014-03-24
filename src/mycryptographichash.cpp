@@ -35,7 +35,7 @@ void MyCryptographicHash::addDataThread(QIODevice* device)
     l2 = 0;
     l3 = true;
 
-    char buffer[1024];
+    char buffer[8 * 1024];
     qint64 length;
 
     while ((length = device->read(buffer,sizeof(buffer))) > 0)
