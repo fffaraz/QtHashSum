@@ -20,7 +20,7 @@ struct FileHasher : public QRunnable
         qint64 len;
         while((len = file.read(buffer, sizeof(buffer))) > 0) ch.addData(buffer, len);
         hash = ch.result().toHex();
-        qDebug() << path << hash;
+        qDebug() << (const char *)path.toStdString().c_str();
     }
 };
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         QString path;
         do
         {
-            qDebug() << QDir::currentPath() << " ?";
+            qDebug() << QDir::currentPath() << "?";
             QTextStream cin(stdin);
             path = cin.readLine().trimmed();
             if(path.size() > 0) QDir::setCurrent(path);
@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
             if(it.fileInfo().isFile() && !file.startsWith("./checksum")) newFiles.insert(file, "");
         }
     }
+    qDebug() << "Files Found" << newFiles.size() << "\n";
     QVector<FileHasher*> jobs;
     {
         QMapIterator<QString, QString> itr(newFiles);
