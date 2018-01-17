@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
             path = cin.readLine().trimmed();
             if(path.size() > 0) QDir::setCurrent(path);
         } while (path.size() > 0);
+        qDebug() << QDir::currentPath();
         QDirIterator it(".", QDirIterator::Subdirectories);
         while(it.hasNext())
         {
