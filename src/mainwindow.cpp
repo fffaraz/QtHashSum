@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    for (int i = 1; i <= QThreadPool::globalInstance()->maxThreadCount() * 2; ++i)
+    {
+        ui->cmbThreads->addItem(QString::number(i));
+    }
 }
 
 MainWindow::~MainWindow()
