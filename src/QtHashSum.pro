@@ -9,13 +9,21 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    filehasher.cpp \
+    progressdialog.cpp \
+    resultdialog.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    filehasher.h \
+    progressdialog.h \
+    resultdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    progressdialog.ui \
+    resultdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QThreadPool>
 
+#include "filehasher.h"
+#include "progressdialog.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -16,8 +19,17 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_btnBrowse_clicked();
+    void on_btnStart_clicked();
+    void on_btnBrowseDir_clicked();
+    void on_btnStartDir_clicked();
+    void on_cmbThreads_currentIndexChanged(const QString &arg1);
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui = nullptr;
+    QThreadPool *threadpool = nullptr;
+    int maxThreadCount = 0;
 };
 
 #endif // MAINWINDOW_H
