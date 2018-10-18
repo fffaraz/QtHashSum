@@ -24,7 +24,7 @@ class ProgressDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ProgressDialog(QVector<FileHasher*> jobs, int size, QWidget *parent = nullptr);
+    explicit ProgressDialog(QVector<FileHasher*> jobs, QWidget *parent = nullptr);
     ~ProgressDialog();
 
 private:

@@ -3,16 +3,17 @@
 
 #include <QGridLayout>
 #include <QDateTime>
+#include <QThreadPool>
 
-ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, int size, QWidget *parent) :
+ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProgressDialog),
     jobs(jobs)
 {
     ui->setupUi(this);
-    setWindowTitle(windowTitle() + " (" + QString::number(jobs.size()) + " files)");
+    setWindowTitle("Progress Status (" + QString::number(jobs.size()) + " files)");
     QGridLayout *layout = new QGridLayout(this);
-    for(int i = 0; i < qMin(size, jobs.size()); ++i)
+    for(int i = 0; i < qMin(QThreadPool::globalInstance()->maxThreadCount(), jobs.size()); ++i)
     {
         ProgressData pd;
         pd.pb = new QProgressBar(this);
@@ -26,6 +27,8 @@ ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, int size, QWidget *pa
         pds.append(pd);
     }
     setLayout(layout);
+    QCoreApplication::processEvents();
+    for(int i = 0; i < jobs.size(); ++i) QThreadPool::globalInstance()->start(jobs[i]);
     connect(&timer, &QTimer::timeout, this, &ProgressDialog::timer_timeout);
     timer.start(200);
 }
@@ -38,18 +41,16 @@ ProgressDialog::~ProgressDialog()
 void ProgressDialog::timer_timeout()
 {
     int used = 0;
-    bool done = true;
-    for(int i = 0; i < jobs.size() && used < pds.size(); ++i)
+    for(int i = 0; i < jobs.size() && used < pds.size(); ++i) if(jobs[i]->started && (!jobs[i]->done || jobs.size() - i <= pds.size() - used))
     {
-        if(jobs[i]->started && (!jobs[i]->done || jobs.size() - i <= pds.size() - used))
-        {
-            pds[used].pb->setValue(jobs[i]->percent());
-            pds[used].label->setText(QString::number(i + 1) + " " + jobs[i]->info());
-            used++;
-        }
-        if(!jobs[i]->done || (used == pds.size() && i != jobs.size() - 1)) done = false;
+        pds[used].pb->setValue(jobs[i]->percent());
+        pds[used].label->setText(QString::number(i + 1) + " " + jobs[i]->info());
+        used++;
     }
-    if(done)
+    int done = 0;
+    for(int i = 0; i < jobs.size(); ++i) if(jobs[i]->done) done++;
+    setWindowTitle("Progress Status (" + QString::number(done) + " / " + QString::number(jobs.size()) + " files done)");
+    if(done == jobs.size())
     {
         timer.stop();
         QString result;

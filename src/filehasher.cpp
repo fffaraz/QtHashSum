@@ -24,7 +24,7 @@ void FileHasher::run()
     hash = qch.result().toHex();
     delete[] buffer;
     done = true;
-    qDebug() << path << method << size << read << hash;
+    //qDebug() << path << method << size << read << hash;
 }
 
 int FileHasher::percent() const
@@ -40,7 +40,7 @@ QString FileHasher::info() const
 
 QString FileHasher::name() const
 {
-    return path.mid(prefix + 1);
+    return path.mid(prefix);
 }
 
 QString FileHasher::methodStr() const

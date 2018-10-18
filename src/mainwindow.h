@@ -28,7 +28,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui = nullptr;
-    QThreadPool *threadpool = nullptr;
     int maxThreadCount = 0;
 };
 

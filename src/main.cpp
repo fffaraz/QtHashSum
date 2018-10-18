@@ -8,3 +8,6 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+
+// TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
+// TODO: add none to the list of hashing methods (list only)

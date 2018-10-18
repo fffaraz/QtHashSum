@@ -10,8 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    threadpool = QThreadPool::globalInstance();
-    maxThreadCount = threadpool->maxThreadCount();
+    maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
     for(int i = 1; i <= maxThreadCount * 2; ++i) ui->cmbThreads->addItem(QString::number(i));
     for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512; ++i) ui->cmbMethods->addItem(FileHasher::methodStr(static_cast<QCryptographicHash::Algorithm>(i)));
     ui->cmbMethods->setCurrentIndex(QCryptographicHash::Sha3_256);
@@ -36,8 +35,8 @@ void MainWindow::on_cmbThreads_currentIndexChanged(const QString &arg1)
 {
     int threads = arg1.toInt();
     qDebug() << "on_cmbThreads_currentIndexChanged" << threads << maxThreadCount;
-    if(threads < 1) threadpool->setMaxThreadCount(maxThreadCount);
-    else threadpool->setMaxThreadCount(threads);
+    if(threads < 1) QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
+    else QThreadPool::globalInstance()->setMaxThreadCount(threads);
 }
 
 void MainWindow::on_btnStart_clicked()
@@ -56,9 +55,8 @@ void MainWindow::on_btnStart_clicked()
         FileHasher* fh = new FileHasher(file.absoluteFilePath(), method, file.absolutePath().size());
         fh->setAutoDelete(false);
         jobs.append(fh);
-        threadpool->start(fh);
     }
-    ProgressDialog *pd = new ProgressDialog(jobs, threadpool->maxThreadCount(), this);
+    ProgressDialog *pd = new ProgressDialog(jobs, this);
     pd->show();
 }
 
@@ -68,17 +66,19 @@ void MainWindow::on_btnStartDir_clicked()
     QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
     QDirIterator it(dir, QDirIterator::Subdirectories);
+    int files = 0;
     while(it.hasNext())
     {
+        files++;
+        if(files % 1000 == 0) qDebug() << "files" << files;
         QString file = it.next();
         if(it.fileInfo().isFile())
         {
             FileHasher* fh = new FileHasher(file, method, dir.size());
             fh->setAutoDelete(false);
             jobs.append(fh);
-            threadpool->start(fh);
         }
     }
-    ProgressDialog *pd = new ProgressDialog(jobs, threadpool->maxThreadCount(), this);
+    ProgressDialog *pd = new ProgressDialog(jobs, this);
     pd->show();
 }
