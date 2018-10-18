@@ -6,7 +6,7 @@ ResultDialog::ResultDialog(QString result, QWidget *parent) :
     ui(new Ui::ResultDialog)
 {
     ui->setupUi(this);
-    ui->plainTextEdit->setPlainText(result + "\n");
+    ui->plainTextEdit->setPlainText(result);
 }
 
 ResultDialog::~ResultDialog()
