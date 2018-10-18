@@ -1,4 +1,4 @@
-QT       += core gui widgets
+QT += core gui widgets
 
 TARGET = QtHashSum
 TEMPLATE = app
@@ -8,20 +8,20 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
+    main.cpp \
+    mainwindow.cpp \
     filehasher.cpp \
     progressdialog.cpp \
     resultdialog.cpp
 
 HEADERS += \
-        mainwindow.h \
+    mainwindow.h \
     filehasher.h \
     progressdialog.h \
     resultdialog.h
 
 FORMS += \
-        mainwindow.ui \
+    mainwindow.ui \
     progressdialog.ui \
     resultdialog.ui
 
