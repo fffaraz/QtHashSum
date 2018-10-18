@@ -39,6 +39,12 @@
           </item>
           <item>
            <widget class="QPushButton" name="btnBrowse">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -155,6 +161,12 @@
           </item>
           <item>
            <widget class="QPushButton" name="btnBrowseDir">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -175,7 +187,7 @@
            <widget class="QComboBox" name="cmbMethods">
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>120</width>
               <height>0</height>
              </size>
             </property>
