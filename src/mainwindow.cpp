@@ -70,7 +70,11 @@ void MainWindow::on_btnStartDir_clicked()
     while(it.hasNext())
     {
         files++;
-        if(files % 1000 == 0) qDebug() << "files" << files;
+        if(files % 1000 == 0)
+        {
+            qDebug() << "files" << files;
+            QCoreApplication::processEvents();
+        }
         QString file = it.next();
         if(it.fileInfo().isFile())
         {
