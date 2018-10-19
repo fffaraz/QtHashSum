@@ -13,3 +13,4 @@ int main(int argc, char *argv[])
 
 // TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
 // TODO: add none to the list of hashing methods (list only)
+// TODO: add icon
