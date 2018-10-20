@@ -93,9 +93,8 @@ void ProgressDialog::timer_timeout()
                 num_duplicates++;
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
-
         }
-        if(duplicates.size() > 0)
+        if(num_duplicates > 0)
         {
             result.append(QString::number(num_duplicates) + " duplicates found\n");
             duplicates.append("\n");
