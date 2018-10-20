@@ -12,5 +12,7 @@ int main(int argc, char *argv[])
 }
 
 // TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
-// TODO: add none to the list of hashing methods (list only)
+// TODO: sort duplicates by product of count x size
+// TODO: add none (or very fast: hash of size + first 1mb) to the list of hashing methods (list only)
 // TODO: add icon
+// TODO: add QElapsedTimer
