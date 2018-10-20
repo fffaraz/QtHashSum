@@ -83,7 +83,6 @@ void ProgressDialog::timer_timeout()
                 num_duplicates++;
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
-
         }
         for(QHash<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
         {
