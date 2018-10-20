@@ -65,7 +65,7 @@ void MainWindow::on_btnStartDir_clicked()
     QCryptographicHash::Algorithm method = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
     QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
-    QDirIterator it(dir, QDirIterator::Subdirectories);
+    QDirIterator it(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int files = 0;
     while(it.hasNext())
     {

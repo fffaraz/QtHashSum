@@ -50,5 +50,5 @@ QString FileHasher::methodStr() const
 
 QString FileHasher::methodStr(QCryptographicHash::Algorithm method)
 {
-    return QVariant::fromValue(method).value<QString>().toUpper().replace('_', '-');
+    return QVariant::fromValue(method).value<QString>().toUpper().replace('_', '-').replace("REALSHA", "SHA");
 }
