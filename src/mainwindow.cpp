@@ -73,6 +73,7 @@ void MainWindow::on_btnStartDir_clicked()
         if(files % 1000 == 0)
         {
             qDebug() << "files" << files;
+            // TODO: file listing progress -> main windows status bar
             QCoreApplication::processEvents();
         }
         QString file = it.next();

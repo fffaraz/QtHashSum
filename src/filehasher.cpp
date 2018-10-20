@@ -13,7 +13,7 @@ void FileHasher::run()
     size = file.size();
     started = true;
     QCryptographicHash qch(method);
-    int buffer_size = 1 * 1024 * 1024;
+    int buffer_size = 1 * 1024 * 1024; // TODO: settings
     char *buffer = new char[static_cast<size_t>(buffer_size)];
     qint64 len = 0;
     while((len = file.read(buffer, buffer_size)) > 0)
