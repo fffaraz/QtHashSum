@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "filehasher.h"
 #include "resultdialog.h"
@@ -33,6 +34,7 @@ private:
     QVector<FileHasher*> jobs;
     QVector<ProgressData> pds;
     QTimer timer;
+    QElapsedTimer elapsedtimer;
 };
 
 #endif // PROGRESSDIALOG_H
