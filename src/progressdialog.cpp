@@ -63,7 +63,7 @@ void ProgressDialog::timer_timeout()
         result.append(QDateTime::currentDateTime().toString() + "\n");
         result.append(QString::number(jobs.size()) + " files hashed\n");
         QString files;
-        QHash<QString, int> hash;
+        QMap<QString, int> hash;
         QHash<QString, qint64> hashsize;
         for(int i = 0; i < jobs.size(); ++i)
         {
@@ -75,7 +75,7 @@ void ProgressDialog::timer_timeout()
         }
         QString duplicates;
         int num_duplicates = 0;
-        for(QHash<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
+        for(QMap<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
         {
             qint64 size = hashsize[itr.key()] / 1048576;
             if(itr.value() > 1 && size > 0)
@@ -84,7 +84,7 @@ void ProgressDialog::timer_timeout()
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
         }
-        for(QHash<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
+        for(QMap<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
         {
             qint64 size = hashsize[itr.key()] / 1048576;
             if(itr.value() > 1 && size < 1)
