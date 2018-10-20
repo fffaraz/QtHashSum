@@ -16,3 +16,4 @@ int main(int argc, char *argv[])
 // TODO: add none (or very fast: hash of size + first 1mb) to the list of hashing methods (list only)
 // TODO: add icon
 // TODO: add QElapsedTimer
+// TODO: file listing progress -> main windows status bar
