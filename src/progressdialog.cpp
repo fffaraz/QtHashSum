@@ -75,12 +75,14 @@ void ProgressDialog::timer_timeout()
         }
         QString duplicates;
         int num_duplicates = 0;
+        qint64 wasted = 0;
         for(QMap<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
         {
             qint64 size = hashsize[itr.key()] / 1048576;
             if(itr.value() > 1 && size > 0)
             {
                 num_duplicates++;
+                wasted += (itr.value() - 1) * hashsize[itr.key()];
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
         }
@@ -90,12 +92,13 @@ void ProgressDialog::timer_timeout()
             if(itr.value() > 1 && size < 1)
             {
                 num_duplicates++;
+                wasted += (itr.value() - 1) * hashsize[itr.key()];
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
         }
         if(num_duplicates > 0)
         {
-            result.append(QString::number(num_duplicates) + " duplicates found\n");
+            result.append(QString::number(num_duplicates) + " duplicates found, " + QString::number(wasted / 1048576) + " MB wasted\n");
             duplicates.append("\n");
         }
         qDebug() << "Result ready" << elapsedtimer.elapsed();
