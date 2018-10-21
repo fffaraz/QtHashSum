@@ -63,23 +63,24 @@ void ProgressDialog::timer_timeout()
         result.append(QDateTime::currentDateTime().toString() + "\n");
         QString files;
         qint64 totalsize = 0;
-        QMap<QString, int> hash;
+        QMap<QString, int> hashmap;
         QHash<QString, qint64> hashsize;
         for(int i = 0; i < jobs.size(); ++i)
         {
             qint64 size = jobs[i]->size;
+            QString hash = jobs[i]->hash;
             totalsize += size;
-            files.append(jobs[i]->methodStr() + " " + jobs[i]->hash + " " + QString::number(size) + " " +jobs[i]->name() + "\n");
-            hash[jobs[i]->hash] = hash[jobs[i]->hash] + 1;
-            if(!hashsize.contains(jobs[i]->hash)) hashsize.insert(jobs[i]->hash, size);
-            else if(hashsize.value(jobs[i]->hash) != size) qDebug() << "ERROR: same hash different size" << jobs[i]->hash;
+            files.append(jobs[i]->methodStr() + " " + hash + " " + QString::number(size) + " " +jobs[i]->name() + "\n");
+            hashmap[hash] = hashmap[hash] + 1;
+            if(!hashsize.contains(hash)) hashsize.insert(hash, size);
+            else if(hashsize.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
             delete jobs[i];
         }
         result.append(QString::number(jobs.size()) + " files hashed," + QString::number(totalsize / 1048576) + " MB total\n");
         QString duplicates;
         int num_duplicates = 0;
         qint64 wasted = 0;
-        for(QMap<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
+        for(QMap<QString, int>::const_iterator itr = hashmap.constBegin(); itr != hashmap.constEnd(); ++itr)
         {
             qint64 size = hashsize[itr.key()] / 1048576;
             if(itr.value() > 1 && size > 0)
@@ -89,7 +90,7 @@ void ProgressDialog::timer_timeout()
                 duplicates.append(QString::number(itr.value()) + " " + QString::number(size) + " " + itr.key() + "\n");
             }
         }
-        for(QMap<QString, int>::const_iterator itr = hash.constBegin(); itr != hash.constEnd(); ++itr)
+        for(QMap<QString, int>::const_iterator itr = hashmap.constBegin(); itr != hashmap.constEnd(); ++itr)
         {
             qint64 size = hashsize[itr.key()] / 1048576;
             if(itr.value() > 1 && size < 1)
