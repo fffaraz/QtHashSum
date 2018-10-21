@@ -33,7 +33,7 @@ ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QWidget *parent) :
     for(int i = 0; i < jobs.size(); ++i) QThreadPool::globalInstance()->start(jobs[i]);
     qDebug() << "All jobs started" << elapsedtimer.elapsed();
     connect(&timer, &QTimer::timeout, this, &ProgressDialog::timer_timeout);
-    timer.start(200);
+    timer.start(500);
 }
 
 ProgressDialog::~ProgressDialog()
