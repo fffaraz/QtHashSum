@@ -8,8 +8,12 @@ FileHasher::FileHasher(QString path, QCryptographicHash::Algorithm method, int p
 void FileHasher::run()
 {
     QFile file(path);
-    if(!file.exists()) return;
-    file.open(QFile::ReadOnly);
+    if(!file.exists() || !file.open(QFile::ReadOnly))
+    {
+        started = done = true;
+        hash = "FILE_ERROR";
+        return;
+    }
     size = file.size();
     started = true;
     QCryptographicHash qch(method);
