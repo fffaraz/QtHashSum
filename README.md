@@ -1,7 +1,7 @@
 QtHashSum
 =========
 
-File Checksum Integrity Verifier
+File Checksum Integrity Verifier & Duplicate File Finder
 
 ### Supported algorithms
 
