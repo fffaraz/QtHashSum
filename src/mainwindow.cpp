@@ -66,24 +66,27 @@ void MainWindow::on_btnStartDir_clicked()
     QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
     QDirIterator it(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
-    int files = 0;
+    int items = 0;
+    quint64 totalsize = 0;
     while(it.hasNext())
     {
-        files++;
-        if(files % 1000 == 0)
+        items++;
+        if(items % 1000 == 0)
         {
-            qDebug() << "files" << files;
+            qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
             // TODO: file listing progress -> main windows status bar
             QCoreApplication::processEvents();
         }
         QString file = it.next();
         if(it.fileInfo().isFile())
         {
+            totalsize += static_cast<quint64>(it.fileInfo().size());
             FileHasher* fh = new FileHasher(file, method, dir.size());
             fh->setAutoDelete(false);
             jobs.append(fh);
         }
     }
+    qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
     ProgressDialog *pd = new ProgressDialog(jobs, this);
     pd->show();
 }
