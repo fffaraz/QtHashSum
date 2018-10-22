@@ -76,7 +76,7 @@ void ProgressDialog::timer_timeout()
             else if(hashsize.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
             delete jobs[i];
         }
-        result.append(QString::number(jobs.size()) + " files hashed," + QString::number(totalsize / 1048576) + " MB total\n");
+        result.append(QString::number(jobs.size()) + " files hashed, " + QString::number(totalsize / 1048576) + " MB total\n");
         QString duplicates;
         int num_duplicates = 0;
         qint64 wasted = 0;
