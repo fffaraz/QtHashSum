@@ -17,3 +17,4 @@ int main(int argc, char *argv[])
 // TODO: add icon
 // TODO: add QElapsedTimer
 // TODO: https://github.com/Cyan4973/xxHash
+// TODO: https://github.com/cmuratori/meow_hash
