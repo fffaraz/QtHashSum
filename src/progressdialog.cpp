@@ -49,6 +49,7 @@ void ProgressDialog::timer_timeout()
         pds[used].pb->setValue(jobs[i]->percent());
         pds[used].label->setText(QString::number(i + 1) + " " + jobs[i]->info());
         used++;
+        QCoreApplication::processEvents();
     }
     int done = 0;
     for(int i = 0; i < jobs.size(); ++i) if(jobs[i]->done) done++;
