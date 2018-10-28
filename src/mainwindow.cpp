@@ -48,6 +48,7 @@ void MainWindow::on_btnStart_clicked()
     if(ui->chkSHA2_512->isChecked()) methods.append(QCryptographicHash::Sha512);
     if(ui->chkSHA3_256->isChecked()) methods.append(QCryptographicHash::Sha3_256);
     if(ui->chkSHA3_512->isChecked()) methods.append(QCryptographicHash::Sha3_512);
+    if(methods.size() < 1) return;
     QVector<FileHasher*> jobs;
     foreach(QCryptographicHash::Algorithm method, methods)
     {
