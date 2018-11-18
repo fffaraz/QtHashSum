@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qDebug() << "Compiled with Qt Version" << QT_VERSION_STR << "run-time" << qVersion();
+    qDebug() << "QtHashSum v1.2.0 compiled with Qt version" << QT_VERSION_STR << "run-time" << qVersion();
     MainWindow w;
     w.show();
     return a.exec();
