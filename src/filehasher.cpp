@@ -39,7 +39,7 @@ int FileHasher::percent() const
 
 QString FileHasher::info() const
 {
-    return methodStr() + ": " + name();
+    return methodStr() + "  " + QString::number(size / 1048576) + " MB  " + name();
 }
 
 QString FileHasher::name() const
