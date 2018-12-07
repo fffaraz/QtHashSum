@@ -1,5 +1,6 @@
 #include "filehasher.h"
 #include <QDebug>
+#include <QThread>
 
 FileHasher::FileHasher(QString path, QCryptographicHash::Algorithm method, int prefix) :
     path(path), method(method), prefix(prefix)
@@ -12,6 +13,7 @@ FileHasher::~FileHasher()
 
 void FileHasher::run()
 {
+    QThread::currentThread()->setPriority(QThread::LowPriority);
     QFile file(path);
     if(!file.exists() || !file.open(QFile::ReadOnly))
     {
