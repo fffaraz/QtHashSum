@@ -30,6 +30,8 @@ public:
 
 private:
     void timer_timeout();
+    void updateProgress();
+    void allDone();
     Ui::ProgressDialog *ui;
     QVector<FileHasher*> jobs;
     QVector<ProgressData> pds;

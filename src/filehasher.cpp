@@ -1,7 +1,12 @@
 #include "filehasher.h"
 #include <QDebug>
 
-FileHasher::FileHasher(QString path, QCryptographicHash::Algorithm method, int prefix) : path(path), method(method), prefix(prefix)
+FileHasher::FileHasher(QString path, QCryptographicHash::Algorithm method, int prefix) :
+    path(path), method(method), prefix(prefix)
+{
+}
+
+FileHasher::~FileHasher()
 {
 }
 
