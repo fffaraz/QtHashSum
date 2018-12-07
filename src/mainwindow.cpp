@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
     for(int i = 1; i <= maxThreadCount * 2; ++i) ui->cmbThreads->addItem(QString::number(i));
-    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512; ++i) ui->cmbMethods->addItem(FileHasher::methodStr(static_cast<QCryptographicHash::Algorithm>(i)));
+    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i) ui->cmbMethods->addItem(FileHasher::methodStr(static_cast<QCryptographicHash::Algorithm>(i)));
     ui->cmbMethods->setCurrentIndex(QCryptographicHash::Sha3_256);
 }
 
