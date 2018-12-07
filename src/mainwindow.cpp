@@ -1,9 +1,29 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+// QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
+// Copyright (C) 2018  Faraz Fallahi <fffaraz@gmail.com>
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QFileDialog>
 #include <QDebug>
 #include <QDirIterator>
+#include <QThreadPool>
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "filehasher.h"
+#include "progressdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,7 +54,7 @@ void MainWindow::on_btnBrowseDir_clicked()
 void MainWindow::on_cmbThreads_currentIndexChanged(const QString &arg1)
 {
     int threads = arg1.toInt();
-    qDebug() << "on_cmbThreads_currentIndexChanged" << threads << maxThreadCount;
+    qDebug() << "MainWindow::on_cmbThreads_currentIndexChanged" << threads << maxThreadCount;
     if(threads < 1) QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
     else QThreadPool::globalInstance()->setMaxThreadCount(threads);
 }
