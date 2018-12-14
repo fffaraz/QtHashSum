@@ -110,7 +110,7 @@ void MainWindow::on_btnStartDir_clicked()
             jobs.append(fh);
         }
     }
-    qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
+    qDebug() << "items, files, totalsize" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
     ProgressDialog *pd = new ProgressDialog(jobs, this);
     pd->show();
 }
