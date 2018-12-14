@@ -48,6 +48,7 @@ void FileHasher::run()
     {
         read += len;
         qch.addData(buffer, static_cast<int>(len));
+        // TODO: break if read > max_read
     }
     hash = qch.result().toHex();
     delete[] buffer;
