@@ -3,6 +3,8 @@ QtHashSum
 
 File Checksum Integrity Verifier & Duplicate File Finder
 
+Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/releases/latest
+
 ### Supported algorithms
 
 * MD4
