@@ -35,3 +35,4 @@ int main(int argc, char *argv[])
 // TODO: https://github.com/Cyan4973/xxHash
 // TODO: https://github.com/cmuratori/meow_hash
 // TODO: ignore desktop.ini
+// TODO: empty file/folder find & delete
