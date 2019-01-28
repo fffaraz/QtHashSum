@@ -32,7 +32,7 @@ void FileHasher::run()
 {
     QThread::currentThread()->setPriority(QThread::LowPriority);
     QFile file(path);
-    if(!file.exists() || !file.open(QFile::ReadOnly))
+    if(!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
     {
         started = done = true;
         hash = "FILE_ERROR";

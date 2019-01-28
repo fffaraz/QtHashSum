@@ -89,10 +89,10 @@ void MainWindow::on_btnStartDir_clicked()
     QCryptographicHash::Algorithm method = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
     QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
-    QDirIterator it(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
+    QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;
     quint64 totalsize = 0;
-    while(it.hasNext())
+    while(itr.hasNext())
     {
         items++;
         if(items % 1000 == 0)
@@ -101,10 +101,10 @@ void MainWindow::on_btnStartDir_clicked()
             // TODO: file listing progress -> main windows status bar
             QCoreApplication::processEvents();
         }
-        QString file = it.next();
-        if(it.fileInfo().isFile())
+        QString file = itr.next();
+        if(itr.fileInfo().isFile())
         {
-            totalsize += static_cast<quint64>(it.fileInfo().size());
+            totalsize += static_cast<quint64>(itr.fileInfo().size());
             FileHasher* fh = new FileHasher(file, method, dir.size());
             fh->setAutoDelete(false);
             jobs.append(fh);
