@@ -30,18 +30,21 @@ SOURCES += \
     mainwindow.cpp \
     filehasher.cpp \
     progressdialog.cpp \
-    resultdialog.cpp
+    resultdialog.cpp \
+    resticdialog.cpp
 
 HEADERS += \
     mainwindow.h \
     filehasher.h \
     progressdialog.h \
-    resultdialog.h
+    resultdialog.h \
+    resticdialog.h
 
 FORMS += \
     mainwindow.ui \
     progressdialog.ui \
-    resultdialog.ui
+    resultdialog.ui \
+    resticdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -24,6 +24,7 @@
 
 #include "filehasher.h"
 #include "progressdialog.h"
+#include "resticdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -114,4 +115,64 @@ void MainWindow::on_btnStartDir_clicked()
     qDebug() << "items, files, totalsize" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
     ProgressDialog *pd = new ProgressDialog(jobs, this);
     pd->show();
+}
+
+QProcessEnvironment MainWindow::getResticEnv()
+{
+    QProcessEnvironment env1;
+    QProcessEnvironment env2 = QProcessEnvironment::systemEnvironment();
+    env1.insert("TMP", env2.value("TMP"));
+    env1.insert("LOCALAPPDATA", env2.value("LOCALAPPDATA"));
+    env1.insert("B2_ACCOUNT_ID", ui->txtResticB2ID->text());
+    env1.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
+    env1.insert("RESTIC_REPOSITORY", ui->txtResticRepo->text());
+    env1.insert("RESTIC_PASSWORD", ui->txtResticPassword->text());
+    return env1;
+}
+
+void MainWindow::on_btnResticInit_clicked()
+{
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose init", getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticBackup_clicked()
+{
+    QString backup = ui->txtResticBackup->text();
+    if(backup.size() < 1) return;
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose backup " + backup, getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticCheck_clicked()
+{
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose check", getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticSnapshots_clicked()
+{
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose snapshots", getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticRestore_clicked()
+{
+    QString restore = ui->txtResticRestore->text();
+    if(restore.size() < 1) return;
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose restore latest --target " + restore, getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticForget_clicked()
+{
+    // --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 5 --prune
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose forget --keep-last 1", getResticEnv(), this);
+    rd->show();
+}
+
+void MainWindow::on_btnResticPrune_clicked()
+{
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose prune", getResticEnv(), this);
+    rd->show();
 }

@@ -14,42 +14,38 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RESTICDIALOG_H
+#define RESTICDIALOG_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include <QProcess>
 
 namespace Ui {
-class MainWindow;
+class ResticDialog;
 }
 
-class MainWindow : public QMainWindow
+class ResticDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit ResticDialog(QString cmd, QString args, QProcessEnvironment env, QWidget *parent = nullptr);
+    ~ResticDialog();
 
 private slots:
-    void on_btnBrowse_clicked();
-    void on_btnStart_clicked();
-    void on_btnBrowseDir_clicked();
-    void on_btnStartDir_clicked();
-    void on_cmbThreads_currentIndexChanged(const QString &arg1);
-    void on_btnResticInit_clicked();
-    void on_btnResticBackup_clicked();
-    void on_btnResticCheck_clicked();
-    void on_btnResticSnapshots_clicked();
-    void on_btnResticRestore_clicked();
-    void on_btnResticForget_clicked();
-    void on_btnResticPrune_clicked();
+    void on_btnRun_clicked();
+    void process_errorOccurred(QProcess::ProcessError error);
+    void process_finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void process_readyReadStandardError();
+    void process_readyReadStandardOutput();
+    void process_started();
+    void process_stateChanged(QProcess::ProcessState newState);
 
 private:
-    Ui::MainWindow *ui = nullptr;
-    int maxThreadCount = 0;
-    QProcessEnvironment getResticEnv();
+    Ui::ResticDialog *ui;
+    QString m_cmd;
+    QProcessEnvironment m_env;
+    QProcess *m_process = nullptr;
 };
 
-#endif // MAINWINDOW_H
+#endif // RESTICDIALOG_H

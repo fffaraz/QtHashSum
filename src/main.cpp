@@ -34,5 +34,7 @@ int main(int argc, char *argv[])
 // TODO: add QElapsedTimer
 // TODO: https://github.com/Cyan4973/xxHash
 // TODO: https://github.com/cmuratori/meow_hash
-// TODO: ignore desktop.ini
+// TODO: ignore desktop.ini in settings
 // TODO: empty file/folder find & delete
+// TODO: restic save settings
+// TODO: restic combobox
