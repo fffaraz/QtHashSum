@@ -121,7 +121,7 @@ QProcessEnvironment MainWindow::getResticEnv()
 {
     QProcessEnvironment env1;
     QProcessEnvironment env2 = QProcessEnvironment::systemEnvironment();
-    env1.insert("TMP", env2.value("TMP"));
+    env1.insert("TMP", env2.value("TMP")); // https://golang.org/pkg/os/#TempDir
     env1.insert("LOCALAPPDATA", env2.value("LOCALAPPDATA"));
     env1.insert("B2_ACCOUNT_ID", ui->txtResticB2ID->text());
     env1.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
