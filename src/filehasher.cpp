@@ -35,7 +35,7 @@ void FileHasher::run()
     if(!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
     {
         started = done = true;
-        hash = "FILE_ERROR";
+        hash = "FILE_ERROR: " + file.errorString();
         return;
     }
     size = file.size();

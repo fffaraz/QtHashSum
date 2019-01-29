@@ -72,10 +72,11 @@ void MainWindow::on_btnStart_clicked()
     if(ui->chkSHA3_256->isChecked()) methods.append(QCryptographicHash::Sha3_256);
     if(ui->chkSHA3_512->isChecked()) methods.append(QCryptographicHash::Sha3_512);
     if(methods.size() < 1) return;
+    QFileInfo file(ui->txtFile->text());
+    if(!file.exists()) return;
     QVector<FileHasher*> jobs;
     foreach(QCryptographicHash::Algorithm method, methods)
-    {
-        QFileInfo file(ui->txtFile->text());
+    {    
         FileHasher* fh = new FileHasher(file.absoluteFilePath(), method, file.absolutePath().size());
         fh->setAutoDelete(false);
         jobs.append(fh);
