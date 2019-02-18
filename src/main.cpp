@@ -21,7 +21,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qDebug() << "QtHashSum " APPVERSION " compiled with Qt version" << QT_VERSION_STR << "run-time" << qVersion();
+    qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
     MainWindow w;
     w.show();
     return a.exec();
