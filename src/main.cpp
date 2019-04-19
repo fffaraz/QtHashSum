@@ -20,11 +20,18 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
     qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
-    MainWindow w;
-    w.show();
-    return a.exec();
+    if(app.arguments().size() < 2)
+    {
+        MainWindow w;
+        w.show();
+        return app.exec();
+    }
+    else
+    {
+        // TODO: cli
+    }
 }
 
 // TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
