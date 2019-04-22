@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
                 std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
             }
         }
+        return 0;
     }
 }
 
