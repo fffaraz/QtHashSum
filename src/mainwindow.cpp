@@ -83,7 +83,7 @@ void MainWindow::on_btnStart_clicked()
         fh->setAutoDelete(false);
         jobs.append(fh);
     }
-    ProgressDialog *pd = new ProgressDialog(jobs, this);
+    ProgressDialog *pd = new ProgressDialog(jobs, true, this);
     pd->show();
 }
 
@@ -114,7 +114,7 @@ void MainWindow::on_btnStartDir_clicked()
         }
     }
     qDebug() << "items, files, totalsize" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
-    ProgressDialog *pd = new ProgressDialog(jobs, this);
+    ProgressDialog *pd = new ProgressDialog(jobs, false, this);
     pd->show();
 }
 

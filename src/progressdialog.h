@@ -40,7 +40,7 @@ class ProgressDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ProgressDialog(QVector<FileHasher*> jobs, QWidget *parent = nullptr);
+    explicit ProgressDialog(QVector<FileHasher*> jobs, bool methodName, QWidget *parent);
     ~ProgressDialog();
 
 private:
@@ -49,6 +49,7 @@ private:
     void allDone();
     Ui::ProgressDialog *ui;
     QVector<FileHasher*> jobs;
+    bool methodName;
     QVector<ProgressData> pds;
     QTimer timer;
     QElapsedTimer elapsedtimer;
