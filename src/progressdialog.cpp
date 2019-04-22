@@ -96,16 +96,20 @@ void ProgressDialog::allDone()
         qint64 size = jobs[i]->size;
         QString hash = jobs[i]->hash;
         QString name = jobs[i]->name();
-        totalsize += size;
 
-        QString info = (methodName ? jobs[i]->methodStr() + " " : "") + hash + " " + QString::number(size);
-        path2info.insertMulti(name, info);
+        if(hash != "7ba990a8886cdf4823cba7579d5e1f550d593e01aef15ebbd8d2b216e1c7d36d") // ignore GDrive desktop.ini
+        {
+            totalsize += size;
 
-        hash2count[hash] = hash2count[hash] + 1;
-        hash2path.insertMulti(hash, jobs[i]->name());
+            QString info = (methodName ? jobs[i]->methodStr() + " " : "") + hash + " " + QString::number(size);
+            path2info.insertMulti(name, info);
 
-        if(!hash2size.contains(hash)) hash2size.insert(hash, size);
-        else if(hash2size.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
+            hash2count[hash] = hash2count[hash] + 1;
+            hash2path.insertMulti(hash, jobs[i]->name());
+
+            if(!hash2size.contains(hash)) hash2size.insert(hash, size);
+            else if(hash2size.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
+        }
 
         delete jobs[i];
     }
