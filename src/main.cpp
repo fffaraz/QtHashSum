@@ -14,9 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "mainwindow.h"
+#include <iostream>
+
 #include <QApplication>
 #include <QDebug>
+#include <QDirIterator>
+
+#include "filehasher.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +35,18 @@ int main(int argc, char *argv[])
     }
     else
     {
-        // TODO: cli
+        QString dir = app.arguments()[1];
+        QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
+        while(itr.hasNext())
+        {
+            QString file = itr.next();
+            if(itr.fileInfo().isFile())
+            {
+                FileHasher fh(file, QCryptographicHash::Algorithm::Sha3_256, dir.size());
+                fh.run();
+                std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
+            }
+        }
     }
 }
 

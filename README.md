@@ -1,7 +1,7 @@
 QtHashSum
 =========
 
-File Checksum Integrity Verifier & Duplicate File Finder
+File Checksum Integrity Verifier & Duplicate File Finder written in C++ Qt
 
 Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/releases/latest
 

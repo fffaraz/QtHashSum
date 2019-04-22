@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("QtHashSum " APPVERSION);
 
     maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
     for(int i = 1; i <= maxThreadCount; ++i) ui->cmbThreads->addItem(QString::number(i));
