@@ -96,22 +96,26 @@ void ProgressDialog::allDone()
         qint64 size = jobs[i]->size;
         QString hash = jobs[i]->hash;
         QString name = jobs[i]->name();
+        QString method = (methodName ? jobs[i]->methodStr() + " " : "");
+        delete jobs[i];
 
-        if(hash != "7ba990a8886cdf4823cba7579d5e1f550d593e01aef15ebbd8d2b216e1c7d36d") // ignore GDrive desktop.ini
+        if(methodName == false && name.endsWith("/desktop.ini"))
         {
-            totalsize += size;
-
-            QString info = (methodName ? jobs[i]->methodStr() + " " : "") + hash + " " + QString::number(size);
-            path2info.insertMulti(name, info);
-
-            hash2count[hash] = hash2count[hash] + 1;
-            hash2path.insertMulti(hash, jobs[i]->name());
-
-            if(!hash2size.contains(hash)) hash2size.insert(hash, size);
-            else if(hash2size.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
+            if(hash == "418c4c275b3c0d70d93f046cd8c2a632121b6072c725bf4355b319fe6dc7b9cd") continue;
+            if(hash == "7ba990a8886cdf4823cba7579d5e1f550d593e01aef15ebbd8d2b216e1c7d36d") continue;
+            if(hash == "dfc6fa51dd38a197f4294d87357b2fe218377535d294d744924122761c03ca8f") continue;
         }
 
-        delete jobs[i];
+        totalsize += size;
+
+        QString info = method + hash + " " + QString::number(size);
+        path2info.insertMulti(name, info);
+
+        hash2count[hash] = hash2count[hash] + 1;
+        hash2path.insertMulti(hash, name);
+
+        if(!hash2size.contains(hash)) hash2size.insert(hash, size);
+        else if(hash2size.value(hash) != size) qDebug() << "ERROR: same hash different size" << hash;
     }
 
     QString duplicates;
