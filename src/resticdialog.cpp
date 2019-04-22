@@ -20,7 +20,7 @@
 #include <QDebug>
 
 #ifdef Q_OS_WIN
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 ResticDialog::ResticDialog(QString cmd, QString args, QProcessEnvironment env, QWidget *parent) :
