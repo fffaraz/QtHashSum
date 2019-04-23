@@ -21,11 +21,11 @@ DuplicateDialog::DuplicateDialog(const QList<QString> &pathlist, QString dir, QW
     {
         if(i != 0)
         {
-            QFileInfo fileinfo1(pathlist[i]);
-            QFileInfo fileinfo2(pathlist[i - 1]);
+            QFileInfo fileinfo1(dir + pathlist[i]);
+            QFileInfo fileinfo2(dir + pathlist[i - 1]);
             if(fileinfo1.fileName() != fileinfo2.fileName()) matchNames = false;
         }
-        else filesize = QFileInfo(pathlist[i]).size();
+        else filesize = QFileInfo(dir + pathlist[i]).size();
         QLabel *label = new QLabel(pathlist[i], this);
         layout->addWidget(label, i, 0);
         QPushButton *button = new QPushButton("Remove", this);
