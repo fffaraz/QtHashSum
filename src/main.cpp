@@ -19,9 +19,56 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDirIterator>
+#include <QElapsedTimer>
 
 #include "filehasher.h"
 #include "mainwindow.h"
+
+void cli(QString dir)
+{
+    QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
+    while(itr.hasNext())
+    {
+        QString file = itr.next();
+        if(itr.fileInfo().isFile())
+        {
+            FileHasher fh(file, QCryptographicHash::Algorithm::Sha3_256, dir.size());
+            fh.run();
+            std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
+        }
+    }
+}
+
+void benchmark(QString file)
+{
+    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
+    {
+        FileHasher fh(file, static_cast<QCryptographicHash::Algorithm>(i), 0);
+        QElapsedTimer timer;
+        timer.start();
+        fh.run();
+        qint64 elapsed = timer.elapsed();
+        std::cout << fh.methodStr().toStdString() << " " << fh.hash.toStdString() << " " << elapsed << std::endl;
+    }
+}
+
+/*
+MD4        741
+MD5        1084
+SHA1       1117
+KECCAK-224 1671
+SHA3-224   1671
+KECCAK-256 1765
+SHA3-256   1765
+SHA3-384   2275
+KECCAK-384 2278
+SHA512     2732
+SHA384     2802
+KECCAK-512 3238
+SHA3-512   3247
+SHA224     3622
+SHA256     3673
+*/
 
 int main(int argc, char *argv[])
 {
@@ -36,17 +83,8 @@ int main(int argc, char *argv[])
     else
     {
         QString dir = app.arguments()[1];
-        QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
-        while(itr.hasNext())
-        {
-            QString file = itr.next();
-            if(itr.fileInfo().isFile())
-            {
-                FileHasher fh(file, QCryptographicHash::Algorithm::Sha3_256, dir.size());
-                fh.run();
-                std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
-            }
-        }
+        if(dir == "-b") benchmark(app.arguments()[2]);
+        else cli(dir);
         return 0;
     }
 }
