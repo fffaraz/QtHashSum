@@ -24,3 +24,7 @@ Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/relea
 ![](https://github.com/fffaraz/QtHashSum/raw/master/img/sc1.png)
 ![](https://github.com/fffaraz/QtHashSum/raw/master/img/sc2.png)
 ![](https://github.com/fffaraz/QtHashSum/raw/master/img/sc3.png)
+
+### See Also
+
+* [diskover](https://github.com/shirosaidev/diskover) - File system crawler, disk space usage, file search engine and file system analytics powered by Elasticsearch.
