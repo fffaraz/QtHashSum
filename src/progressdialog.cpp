@@ -25,10 +25,11 @@
 #include "resultdialog.h"
 #include "duplicatedialog.h"
 
-ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, bool methodName, bool removeDups, QWidget *parent = nullptr) :
+ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString dir, bool methodName, bool removeDups, QWidget *parent = nullptr) :
     QDialog(parent),
     ui(new Ui::ProgressDialog),
     jobs(jobs),
+    dir(dir),
     methodName(methodName),
     removeDups(removeDups)
 {
@@ -138,7 +139,7 @@ void ProgressDialog::allDone()
                 foreach(QString path, pathlist) duplicates.append("\t" + path + "\n");
                 if(removeDups)
                 {
-                    DuplicateDialog dd(pathlist, this);
+                    DuplicateDialog dd(pathlist, dir, this);
                     dd.exec();
                 }
             }
