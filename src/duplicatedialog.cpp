@@ -38,13 +38,11 @@ void DuplicateDialog::remove_clicked()
     if(button != nullptr)
     {
         QFile file(button->statusTip());
+        qDebug() << "Removed" << button->statusTip();
         if(file.exists())
         {
             bool ok = file.remove();
-            if(!ok)
-            {
-                QMessageBox::warning(this, "", "Remove failed!");
-            }
+            if(!ok) QMessageBox::warning(this, "", "Remove failed!");
         }
         else
         {

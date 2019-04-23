@@ -124,12 +124,14 @@ void ProgressDialog::allDone()
     QString duplicates;
     int num_duplicates = 0;
     qint64 wasted = 0;
-    for(int flag = 0; flag < 2; ++flag)
+    static const int min_size[] = {1000, 100, 10, 1, 0};
+    for(int i = 0; i < 5; ++i)
     {
         for(auto hash2count_itr = hash2count.constBegin(); hash2count_itr != hash2count.constEnd(); ++hash2count_itr)
         {
             qint64 size_mb = hash2size[hash2count_itr.key()] / 1048576;
-            if(hash2count_itr.value() > 1 && ((size_mb >= 1 && flag == 0) || (size_mb < 1 && flag == 1)))
+            bool size_ok = (size_mb >= min_size[i] && (i == 0 || size_mb < min_size[i - 1]));
+            if(hash2count_itr.value() > 1 && size_ok)
             {
                 num_duplicates++;
                 wasted += (hash2count_itr.value() - 1) * hash2size[hash2count_itr.key()];
