@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>638</width>
-    <height>362</height>
+    <width>605</width>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -207,6 +207,13 @@
            </spacer>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkDuplicates">
+          <property name="text">
+           <string>Offer to remove duplicates</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_3">
@@ -532,8 +539,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>638</width>
-     <height>20</height>
+     <width>605</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

@@ -23,12 +23,14 @@
 #include "ui_progressdialog.h"
 
 #include "resultdialog.h"
+#include "duplicatedialog.h"
 
-ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, bool methodName, QWidget *parent = nullptr) :
+ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, bool methodName, bool removeDups, QWidget *parent = nullptr) :
     QDialog(parent),
     ui(new Ui::ProgressDialog),
     jobs(jobs),
-    methodName(methodName)
+    methodName(methodName),
+    removeDups(removeDups)
 {
     ui->setupUi(this);
     setWindowTitle("Progress Status (" + QString::number(jobs.size()) + " files)");
@@ -125,15 +127,20 @@ void ProgressDialog::allDone()
     {
         for(auto hash2count_itr = hash2count.constBegin(); hash2count_itr != hash2count.constEnd(); ++hash2count_itr)
         {
-            qint64 size = hash2size[hash2count_itr.key()] / 1048576;
-            if(hash2count_itr.value() > 1 && ((size > 0 && flag == 0) || (size < 1 && flag == 1)))
+            qint64 size_mb = hash2size[hash2count_itr.key()] / 1048576;
+            if(hash2count_itr.value() > 1 && ((size_mb >= 1 && flag == 0) || (size_mb < 1 && flag == 1)))
             {
                 num_duplicates++;
                 wasted += (hash2count_itr.value() - 1) * hash2size[hash2count_itr.key()];
-                duplicates.append(QString::number(hash2count_itr.value()) + " " + QString::number(size) + " " + hash2count_itr.key() + "\n");
+                duplicates.append(QString::number(hash2count_itr.value()) + " " + QString::number(size_mb) + " " + hash2count_itr.key() + "\n");
                 QList<QString> pathlist = hash2path.values(hash2count_itr.key());
                 pathlist.sort();
                 foreach(QString path, pathlist) duplicates.append("\t" + path + "\n");
+                if(removeDups)
+                {
+                    DuplicateDialog dd(pathlist, this);
+                    dd.exec();
+                }
             }
         }
     }

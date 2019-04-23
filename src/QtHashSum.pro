@@ -21,7 +21,7 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
-DEFINES += APPVERSION=\\\"v1.5.0\\\"
+DEFINES += APPVERSION=\\\"v1.6.0\\\"
 
 CONFIG += c++11 release optimize_full
 
@@ -31,20 +31,23 @@ SOURCES += \
     filehasher.cpp \
     progressdialog.cpp \
     resultdialog.cpp \
-    resticdialog.cpp
+    resticdialog.cpp \
+    duplicatedialog.cpp
 
 HEADERS += \
     mainwindow.h \
     filehasher.h \
     progressdialog.h \
     resultdialog.h \
-    resticdialog.h
+    resticdialog.h \
+    duplicatedialog.h
 
 FORMS += \
     mainwindow.ui \
     progressdialog.ui \
     resultdialog.ui \
-    resticdialog.ui
+    resticdialog.ui \
+    duplicatedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
