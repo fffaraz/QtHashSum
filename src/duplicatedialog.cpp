@@ -16,6 +16,7 @@ DuplicateDialog::DuplicateDialog(const QList<QString> &pathlist, QString dir, QW
     ui->setupUi(this);
     QGridLayout *layout = new QGridLayout(this);
     bool matchNames = true;
+    qint64 filesize = 0;
     for(int i = 0; i < pathlist.size(); ++i)
     {
         if(i != 0)
@@ -24,6 +25,7 @@ DuplicateDialog::DuplicateDialog(const QList<QString> &pathlist, QString dir, QW
             QFileInfo fileinfo2(pathlist[i - 1]);
             if(fileinfo1.fileName() != fileinfo2.fileName()) matchNames = false;
         }
+        else filesize = QFileInfo(pathlist[i]).size();
         QLabel *label = new QLabel(pathlist[i], this);
         layout->addWidget(label, i, 0);
         QPushButton *button = new QPushButton("Remove", this);
@@ -32,8 +34,7 @@ DuplicateDialog::DuplicateDialog(const QList<QString> &pathlist, QString dir, QW
         connect(button, SIGNAL(clicked()), this, SLOT(remove_clicked()));
         layout->addWidget(button, i, 1);
     }
-    QFileInfo fileinfo(pathlist[0]);
-    layout->addWidget(new QLabel("Size: " + QString::number(fileinfo.size()), this));
+    layout->addWidget(new QLabel("Size: " + QString::number(filesize), this));
     if(matchNames) layout->addWidget(new QLabel("All files have the same name", this));
     setLayout(layout);
 }
