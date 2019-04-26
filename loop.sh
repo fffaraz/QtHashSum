@@ -19,6 +19,7 @@ WatchDir=$(readlink -f "$WatchDir") # realpath, cd "$WatchDir"; pwd
 [ -f "$OutFile" ] && touch "$OutFile"
 
 GitRepo=$(dirname "$OutFile")
+GitRepo=$(readlink -f "$GitRepo")
 IsGitRepo=$(git -C "$GitRepo" rev-parse --is-inside-work-tree > /dev/null 2>&1)
 
 if [ "$IsGitRepo" ]; then
