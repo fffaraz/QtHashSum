@@ -26,13 +26,20 @@
 
 void cli(QString dir)
 {
-    QVector<QString> files;
+    QStringList files;
+    qint64 size = 0;
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     while(itr.hasNext())
     {
         QString file = itr.next();
-        if(itr.fileInfo().isFile()) files.append(file);
+        if(itr.fileInfo().isFile())
+        {
+            files.append(file);
+            size += itr.fileInfo().size();
+        }
     }
+    std::cout << files.size() << " files hashed, " << size / 1048576 << " MB total" << std::endl;
+    files.sort(Qt::CaseSensitivity::CaseInsensitive);
     for(int i = 0; i < files.size(); ++i)
     {
         FileHasher fh(files[i], QCryptographicHash::Algorithm::Sha3_256, dir.size());
