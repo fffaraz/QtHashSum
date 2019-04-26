@@ -22,17 +22,18 @@ GitRepo=$(dirname "$OutFile")
 GitRepo=$(readlink -f "$GitRepo")
 IsGitRepo=0
 git -C "$GitRepo" rev-parse --is-inside-work-tree > /dev/null 2>&1
-
-if [ $? -eq 0 ]; then
-	echo "inside git repo"
-	IsGitRepo=1
-else
-	echo "not in git repo"
-fi
+[ $? -eq 0 ] && IsGitRepo=1
 
 while :
 do
+	date
 	docker run --rm -i -v "$WatchDir":/data fffaraz/qthashsum . > "$OutFile"
 	date
+	if [ $IsGitRepo -ne 0 ]; then
+		if [ -n "$(git -C "$GitRepo" status --porcelain)" ]; then
+			git -C "$GitRepo" add "$OutFile"
+			git -C "$GitRepo" commit -m "$(date)"
+		fi
+	fi
 	sleep 3600
 done
