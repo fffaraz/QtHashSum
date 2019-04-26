@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -eux
 
 if [ $# -lt 2 ]; then
 	echo "Usage: loop.sh WatchDir OutFile"
