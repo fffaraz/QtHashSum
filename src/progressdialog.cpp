@@ -108,6 +108,7 @@ void ProgressDialog::allDone()
             if(hash == "7ba990a8886cdf4823cba7579d5e1f550d593e01aef15ebbd8d2b216e1c7d36d") continue;
             if(hash == "dfc6fa51dd38a197f4294d87357b2fe218377535d294d744924122761c03ca8f") continue;
         }
+        if(methodName == false && name.contains("/.git/")) continue;
 
         totalsize += size;
 
