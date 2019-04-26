@@ -3,7 +3,8 @@ QtHashSum
 
 File Checksum Integrity Verifier & Duplicate File Finder written in C++ Qt
 
-Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/releases/latest
+* Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/releases/latest
+* Docker hub: https://hub.docker.com/r/fffaraz/qthashsum
 
 ```
 git clone https://github.com/fffaraz/QtHashSum.git
