@@ -92,6 +92,7 @@ void MainWindow::on_btnStartDir_clicked()
     QCryptographicHash::Algorithm method = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
     QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
+    if(dir.size() < 1) return;
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;
     quint64 totalsize = 0;
