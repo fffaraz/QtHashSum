@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ux
 
-if [ $# -lt 2 ]; then
+if [ $# -ne 2 ]; then
 	echo "Usage: loop.sh WatchDir OutFile"
 	exit 1
 fi
@@ -32,7 +32,7 @@ do
 	if [ $IsGitRepo -ne 0 ]; then
 		if [ -n "$(git -C "$GitRepo" status --porcelain)" ]; then
 			git -C "$GitRepo" add "$OutFile"
-			git -C "$GitRepo" commit -m "$(date)"
+			git -C "$GitRepo" commit -m "QtHashSum $(date)"
 		fi
 	fi
 	sleep 3600
