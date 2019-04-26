@@ -5,6 +5,13 @@ File Checksum Integrity Verifier & Duplicate File Finder written in C++ Qt
 
 Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/releases/latest
 
+```
+git clone https://github.com/fffaraz/QtHashSum.git
+cd QtHashSum/docker
+docker build --rm -t fffaraz/qthashsum .
+docker run --rm -it fffaraz/qthashsum
+```
+
 ### Supported algorithms
 
 * MD4

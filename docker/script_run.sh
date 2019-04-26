@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euxo pipefail
 
-exec /opt/QtHashSum/src/
+exec /opt/QtHashSum/src/QtHashSum "$@"
