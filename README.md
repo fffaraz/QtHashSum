@@ -8,7 +8,7 @@ Download compiled Windows executable: https://github.com/fffaraz/QtHashSum/relea
 ```
 git clone https://github.com/fffaraz/QtHashSum.git
 cd QtHashSum/docker
-docker build --rm -t fffaraz/qthashsum .
+docker build --rm --no-cache -t fffaraz/qthashsum .
 docker run --rm -it fffaraz/qthashsum
 ```
 
