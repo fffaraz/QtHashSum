@@ -68,9 +68,9 @@ SHA2-256  3673
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
     if(argc < 2)
     {
+        qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
         QApplication app(argc, argv);
         MainWindow w;
         w.show();
