@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-if [ $# -lt 3 ]; then
+if [ $# -lt 2 ]; then
 	echo "Usage: loop.sh WatchDir OutFile"
 	exit 1
 fi
@@ -14,7 +14,7 @@ if [ ! -d "$WatchDir" ]; then
 	exit 1
 fi
 
-WatchDir=(cd "$WatchDir"; pwd) # realpath, readlink -f
+WatchDir=$(readlink -f "$WatchDir") # realpath, cd "$WatchDir"; pwd
 
 [ -f "$OutFile" ] && touch "$OutFile"
 
