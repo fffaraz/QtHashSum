@@ -2,4 +2,4 @@
 
 cd /opt
 [ -d /data ] && cd /data
-exec /opt/QtHashSum/src/QtHashSum "$@"
+exec /opt/QtHashSum "$@"
