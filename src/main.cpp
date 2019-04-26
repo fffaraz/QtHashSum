@@ -68,18 +68,18 @@ SHA2-256  3673
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
     qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
-    if(app.arguments().size() < 2)
+    if(argc < 2)
     {
+        QApplication app(argc, argv);
         MainWindow w;
         w.show();
         return app.exec();
     }
     else
     {
-        QString dir = app.arguments()[1];
-        if(dir == "-b") benchmark(app.arguments()[2]);
+        QString dir = argv[1];
+        if(dir == "-b") benchmark(argv[2]);
         else cli(dir);
         return 0;
     }
