@@ -26,16 +26,18 @@
 
 void cli(QString dir)
 {
+    QVector<QString> files;
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     while(itr.hasNext())
     {
         QString file = itr.next();
-        if(itr.fileInfo().isFile())
-        {
-            FileHasher fh(file, QCryptographicHash::Algorithm::Sha3_256, dir.size());
-            fh.run();
-            std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
-        }
+        if(itr.fileInfo().isFile()) files.append(file);
+    }
+    for(int i = 0; i < files.size(); ++i)
+    {
+        FileHasher fh(files[i], QCryptographicHash::Algorithm::Sha3_256, dir.size());
+        fh.run();
+        std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
     }
 }
 
