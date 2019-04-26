@@ -20,10 +20,12 @@ WatchDir=$(readlink -f "$WatchDir") # realpath, cd "$WatchDir"; pwd
 
 GitRepo=$(dirname "$OutFile")
 GitRepo=$(readlink -f "$GitRepo")
-IsGitRepo=$(git -C "$GitRepo" rev-parse --is-inside-work-tree > /dev/null 2>&1)
+IsGitRepo=0
+git -C "$GitRepo" rev-parse --is-inside-work-tree > /dev/null 2>&1
 
-if [ "$IsGitRepo" ]; then
+if [ $? -eq 0 ]; then
 	echo "inside git repo"
+	IsGitRepo=1
 else
 	echo "not in git repo"
 fi
