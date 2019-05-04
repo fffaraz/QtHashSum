@@ -121,15 +121,15 @@ void MainWindow::on_btnStartDir_clicked()
 
 QProcessEnvironment MainWindow::getResticEnv()
 {
-    QProcessEnvironment env1;
-    QProcessEnvironment env2 = QProcessEnvironment::systemEnvironment();
-    env1.insert("TMP", env2.value("TMP")); // https://golang.org/pkg/os/#TempDir
-    env1.insert("LOCALAPPDATA", env2.value("LOCALAPPDATA"));
-    env1.insert("B2_ACCOUNT_ID", ui->txtResticB2ID->text());
-    env1.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
-    env1.insert("RESTIC_REPOSITORY", ui->txtResticRepo->text());
-    env1.insert("RESTIC_PASSWORD", ui->txtResticPassword->text());
-    return env1;
+    QProcessEnvironment sysenv = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment env;
+    env.insert("TMP", sysenv.value("TMP")); // https://golang.org/pkg/os/#TempDir
+    env.insert("LOCALAPPDATA", sysenv.value("LOCALAPPDATA"));
+    env.insert("B2_ACCOUNT_ID", ui->txtResticB2ID->text());
+    env.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
+    env.insert("RESTIC_REPOSITORY", ui->txtResticRepo->text());
+    env.insert("RESTIC_PASSWORD", ui->txtResticPassword->text());
+    return env;
 }
 
 void MainWindow::on_btnResticInit_clicked()
@@ -162,14 +162,18 @@ void MainWindow::on_btnResticRestore_clicked()
 {
     QString restore = ui->txtResticRestore->text();
     if(restore.size() < 1) return;
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose restore latest --target " + restore, getResticEnv(), this);
+    QString snapshot = ui->txtResticSnapshot->text();
+    if(snapshot.size() < 1) return;
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose restore " + snapshot + " --target " + restore, getResticEnv(), this);
     rd->show();
 }
 
 void MainWindow::on_btnResticForget_clicked()
 {
-    // --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 5 --prune
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose forget --keep-last 1", getResticEnv(), this);
+    QString forget = ui->txtResticForget->text();
+    if(forget.size() < 1) return;
+    // --keep-last 1
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose " + forget, getResticEnv(), this);
     rd->show();
 }
 

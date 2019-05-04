@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>605</width>
-    <height>352</height>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -457,6 +457,20 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="txtResticSnapshot">
             <property name="text">
              <string>latest</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>FORGET</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="txtResticForget">
+            <property name="text">
+             <string>--keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 5 --prune</string>
             </property>
            </widget>
           </item>
