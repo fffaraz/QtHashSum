@@ -148,6 +148,8 @@ void MainWindow::on_btnResticBackup_clicked()
 
 void MainWindow::on_btnResticCheck_clicked()
 {
+    // --read-data
+    // --read-data-subset=1/5
     ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose check", getResticEnv(), this);
     rd->show();
 }
