@@ -129,6 +129,10 @@ QProcessEnvironment MainWindow::getResticEnv()
     env.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
     env.insert("RESTIC_REPOSITORY", ui->txtResticRepo->text());
     env.insert("RESTIC_PASSWORD", ui->txtResticPassword->text());
+    // AWS_ACCESS_KEY_ID
+    // AWS_SECRET_ACCESS_KEY
+    // s3:s3.wasabisys.com/my-backup-bucket
+    // b2:bucket:folder
     return env;
 }
 
@@ -140,6 +144,8 @@ void MainWindow::on_btnResticInit_clicked()
 
 void MainWindow::on_btnResticBackup_clicked()
 {
+    // --exclude .cache --exclude .local
+    // mysqldump database | restic backup --stdin --stdin-filename database.sql
     QString backup = ui->txtResticBackup->text();
     if(backup.size() < 1) return;
     ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose backup " + backup, getResticEnv(), this);
