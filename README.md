@@ -36,3 +36,4 @@ docker run --rm -i -v $(pwd):/data fffaraz/qthashsum .
 ### See Also
 
 * [diskover](https://github.com/shirosaidev/diskover) - File system crawler, disk space usage, file search engine and file system analytics powered by Elasticsearch.
+* [Comparison of file verification software](https://en.wikipedia.org/wiki/Comparison_of_file_verification_software)

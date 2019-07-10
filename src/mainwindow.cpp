@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2018  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ void MainWindow::on_btnStart_clicked()
         fh->setAutoDelete(false);
         jobs.append(fh);
     }
-    ProgressDialog *pd = new ProgressDialog(jobs, "", true, false, this);
+    ProgressDialog *pd = new ProgressDialog(jobs, "", true, false, "", this);
     pd->show();
 }
 
@@ -115,7 +115,7 @@ void MainWindow::on_btnStartDir_clicked()
         }
     }
     qDebug() << "items, files, totalsize" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
-    ProgressDialog *pd = new ProgressDialog(jobs, dir, false, ui->chkDuplicates->isChecked(), this);
+    ProgressDialog *pd = new ProgressDialog(jobs, dir, false, ui->chkDuplicates->isChecked(), ui->cmbFormats->currentText(), this);
     pd->show();
 }
 
