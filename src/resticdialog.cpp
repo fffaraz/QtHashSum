@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2018  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ void ResticDialog::on_btnRun_clicked()
     qDebug() << "ResticDialog::on_btnRun_clicked";
     ui->btnRun->setEnabled(false);
     m_process = new QProcess();
+
 #ifdef Q_OS_WIN
     m_process->setCreateProcessArgumentsModifier([] (QProcess::CreateProcessArguments *args)
     {
@@ -59,6 +60,7 @@ void ResticDialog::on_btnRun_clicked()
         args->startupInfo->dwFillAttribute = BACKGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY;
     });
 #endif
+
     m_process->setProcessEnvironment(m_env);
     m_process->setInputChannelMode(QProcess::ManagedInputChannel);
     m_process->setProcessChannelMode(QProcess::SeparateChannels);

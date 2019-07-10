@@ -1,5 +1,5 @@
 name: qthashsum
-version: "1.6.0"
+version: "1.7.0"
 summary: QtHashSum
 description: File Checksum Integrity Verifier & Duplicate File Finder written in C++ Qt
 

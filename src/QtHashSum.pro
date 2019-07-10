@@ -1,5 +1,5 @@
 # QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-# Copyright (C) 2018  Faraz Fallahi <fffaraz@gmail.com>
+# Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
-DEFINES += APPVERSION=\\\"v1.6.0\\\"
+DEFINES += APPVERSION=\\\"v1.7.0\\\"
 
 CONFIG += c++11 release optimize_full
 
