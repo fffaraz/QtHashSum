@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 {
     if(argc < 2)
     {
-        qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion();
+        qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion() << "CPP" << __cplusplus;
         QApplication app(argc, argv);
         MainWindow w;
         w.show();
