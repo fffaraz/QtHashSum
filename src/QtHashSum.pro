@@ -24,7 +24,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 DEFINES += APPVERSION=\\\"v1.7.0\\\"
 
 CONFIG += c++11 release optimize_full
-msvc:QMAKE_CXXFLAGS += /std:c++latest /Zc:__cplusplus
+msvc: QMAKE_CXXFLAGS += /std:c++latest /Zc:__cplusplus
 
 SOURCES += \
     main.cpp \
