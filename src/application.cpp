@@ -39,15 +39,18 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
     while(itr.hasNext())
     {
         items++;
+
         if(items % 1000 == 0)
         {
             qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
             // TODO: file listing progress -> main windows status bar
             QCoreApplication::processEvents();
         }
+
         QString file = itr.next();
         if(itr.fileInfo().isFile())
         {
+            // TODO: skip ignored files (/proc, /dev, ...)
             totalsize += static_cast<quint64>(itr.fileInfo().size());
             FileHasher* fh = new FileHasher(file, settings);
             fh->setAutoDelete(false);
