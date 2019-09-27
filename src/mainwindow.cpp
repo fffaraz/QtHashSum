@@ -16,8 +16,6 @@
 
 #include <QFileDialog>
 #include <QDebug>
-#include <QDirIterator>
-#include <QThreadPool>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -26,18 +24,18 @@
 #include "progressdialog.h"
 #include "resticdialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(Application *application, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    application(application)
 {
     ui->setupUi(this);
     this->setWindowTitle("QtHashSum " APPVERSION);
 
-    maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
-    for(int i = 1; i <= maxThreadCount; ++i) ui->cmbThreads->addItem(QString::number(i));
+    for(int i = 1; i <= application->maxThreadCount; ++i) ui->cmbThreads->addItem(QString::number(i));
     ui->cmbThreads->setCurrentIndex(2);
 
-    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i) ui->cmbMethods->addItem(FileHasher::methodStr(static_cast<QCryptographicHash::Algorithm>(i)));
+    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i) ui->cmbMethods->addItem(Settings(static_cast<QCryptographicHash::Algorithm>(i)).methodStr());
     ui->cmbMethods->setCurrentIndex(QCryptographicHash::Sha3_256);
 }
 
@@ -58,10 +56,7 @@ void MainWindow::on_btnBrowseDir_clicked()
 
 void MainWindow::on_cmbThreads_currentIndexChanged(const QString &arg1)
 {
-    int threads = arg1.toInt();
-    qDebug() << "MainWindow::on_cmbThreads_currentIndexChanged" << threads << maxThreadCount;
-    if(threads < 1) QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
-    else QThreadPool::globalInstance()->setMaxThreadCount(threads);
+    application->setMaxThreadCount(arg1.toInt());
 }
 
 void MainWindow::on_btnStart_clicked()
@@ -74,47 +69,31 @@ void MainWindow::on_btnStart_clicked()
     if(ui->chkSHA3_256->isChecked()) methods.append(QCryptographicHash::Sha3_256);
     if(ui->chkSHA3_512->isChecked()) methods.append(QCryptographicHash::Sha3_512);
     if(methods.size() < 1) return;
+
     QFileInfo file(ui->txtFile->text());
     if(!file.exists()) return;
+    Settings settings;
+    settings.prefix_len = file.absolutePath().size();
     QVector<FileHasher*> jobs;
     foreach(QCryptographicHash::Algorithm method, methods)
-    {    
-        FileHasher* fh = new FileHasher(file.absoluteFilePath(), method, file.absolutePath().size());
+    {
+        settings.method = method;
+        FileHasher* fh = new FileHasher(file.absoluteFilePath(), settings);
         fh->setAutoDelete(false);
         jobs.append(fh);
     }
+
     ProgressDialog *pd = new ProgressDialog(jobs, "", true, false, "", this);
     pd->show();
 }
 
 void MainWindow::on_btnStartDir_clicked()
 {
-    QCryptographicHash::Algorithm method = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
-    QVector<FileHasher*> jobs;
     QString dir = ui->txtDir->text();
     if(dir.size() < 1) return;
-    QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
-    int items = 0;
-    quint64 totalsize = 0;
-    while(itr.hasNext())
-    {
-        items++;
-        if(items % 1000 == 0)
-        {
-            qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
-            // TODO: file listing progress -> main windows status bar
-            QCoreApplication::processEvents();
-        }
-        QString file = itr.next();
-        if(itr.fileInfo().isFile())
-        {
-            totalsize += static_cast<quint64>(itr.fileInfo().size());
-            FileHasher* fh = new FileHasher(file, method, dir.size());
-            fh->setAutoDelete(false);
-            jobs.append(fh);
-        }
-    }
-    qDebug() << "items, files, totalsize" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
+
+    QVector<FileHasher *> jobs = application->parseDir(dir, static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex()));
+
     ProgressDialog *pd = new ProgressDialog(jobs, dir, false, ui->chkDuplicates->isChecked(), ui->cmbFormats->currentText(), this);
     pd->show();
 }

@@ -21,6 +21,7 @@
 #include <QDirIterator>
 #include <QElapsedTimer>
 
+#include "application.h"
 #include "filehasher.h"
 #include "mainwindow.h"
 
@@ -40,9 +41,12 @@ void cli(QString dir)
     }
     std::cout << files.size() << " files hashed, " << size / 1048576 << " MB total" << std::endl;
     files.sort(Qt::CaseSensitivity::CaseInsensitive);
+    Settings settings;
+    settings.method = QCryptographicHash::Algorithm::Sha3_256;
+    settings.prefix_len = dir.size();
     for(int i = 0; i < files.size(); ++i)
     {
-        FileHasher fh(files[i], QCryptographicHash::Algorithm::Sha3_256, dir.size());
+        FileHasher fh(files[i], settings);
         fh.run();
         std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
     }
@@ -52,7 +56,8 @@ void benchmark(QString file)
 {
     for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
     {
-        FileHasher fh(file, static_cast<QCryptographicHash::Algorithm>(i), 0);
+        Settings settings(static_cast<QCryptographicHash::Algorithm>(i));
+        FileHasher fh(file, settings);
         QElapsedTimer timer;
         timer.start();
         fh.run();
@@ -77,11 +82,12 @@ SHA224   17330 17501
 
 int main(int argc, char *argv[])
 {
+    Application application;
     if(argc < 2)
     {
         qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion() << "CPP" << __cplusplus;
         QApplication app(argc, argv);
-        MainWindow w;
+        MainWindow w(&application);
         w.show();
         return app.exec();
     }

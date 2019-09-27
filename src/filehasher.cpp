@@ -19,8 +19,8 @@
 #include <QThread>
 #include <QFile>
 
-FileHasher::FileHasher(QString path, QCryptographicHash::Algorithm method, int prefix) :
-    path(path), method(method), prefix(prefix)
+FileHasher::FileHasher(const QString &path, const Settings &settings) :
+    path(path), settings(settings)
 {
 }
 
@@ -39,8 +39,14 @@ void FileHasher::run()
         return;
     }
     size = file.size();
+    if(size < 0)
+    {
+        started = done = true;
+        hash = "FILE_ERROR: size < 0";
+        return;
+    }
     started = true;
-    QCryptographicHash qch(method);
+    QCryptographicHash qch(settings.method);
     int buffer_size = 1 * 1024 * 1024; // TODO: settings
     char *buffer = new char[static_cast<size_t>(buffer_size)];
     qint64 len = 0;
@@ -48,7 +54,7 @@ void FileHasher::run()
     {
         read += len;
         qch.addData(buffer, static_cast<int>(len));
-        // TODO: break if read > max_read
+        if(settings.max_read >= 0 && read >= settings.max_read) break;
     }
     hash = qch.result().toHex();
     delete[] buffer;
@@ -64,20 +70,20 @@ int FileHasher::percent() const
 
 QString FileHasher::info() const
 {
-    return methodStr() + "  " + QString::number(size / 1048576) + " MB  " + name();
+    return settings.methodStr() + "  " + QString::number(size / 1048576) + " MB  " + name();
 }
 
 QString FileHasher::name() const
 {
-    return path.mid(prefix);
+    return path.mid(settings.prefix_len);
 }
 
 QString FileHasher::methodStr() const
 {
-    return methodStr(method);
+    return settings.methodStr();
 }
 
-QString FileHasher::methodStr(QCryptographicHash::Algorithm method)
+QString Settings::methodStr() const
 {
     return QVariant::fromValue(method).value<QString>().toUpper().replace('_', '-').replace("REALSHA", "SHA");
 }

@@ -20,6 +20,8 @@
 #include <QMainWindow>
 #include <QProcess>
 
+#include "application.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -29,7 +31,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Application *application, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -48,7 +50,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui = nullptr;
-    int maxThreadCount = 0;
+    Application *application = nullptr;
     QProcessEnvironment getResticEnv();
 };
 
