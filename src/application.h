@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
 #include <QProcess>
 
@@ -30,5 +29,3 @@ public:
     void setMaxThreadCount(int threads);
     int maxThreadCount = 0;
 };
-
-#endif // APPLICATION_H

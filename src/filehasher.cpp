@@ -22,6 +22,7 @@
 FileHasher::FileHasher(const QString &path, const Settings &settings) :
     path(path), settings(settings)
 {
+    setAutoDelete(false);
 }
 
 FileHasher::~FileHasher()
@@ -31,6 +32,7 @@ FileHasher::~FileHasher()
 void FileHasher::run()
 {
     QThread::currentThread()->setPriority(QThread::LowPriority);
+
     QFile file(path);
     if(!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
     {
@@ -38,6 +40,7 @@ void FileHasher::run()
         hash = "FILE_ERROR: " + file.errorString();
         return;
     }
+
     size = file.size();
     if(size < 0)
     {
@@ -45,21 +48,26 @@ void FileHasher::run()
         hash = "FILE_ERROR: size < 0";
         return;
     }
+
     started = true;
-    QCryptographicHash qch(settings.method);
+
     int buffer_size = 1 * 1024 * 1024; // TODO: settings
     char *buffer = new char[static_cast<size_t>(buffer_size)];
     qint64 len = 0;
+
+    QCryptographicHash qch(settings.method);
     while((len = file.read(buffer, buffer_size)) > 0)
     {
         read += len;
         qch.addData(buffer, static_cast<int>(len));
         if(settings.max_read >= 0 && read >= settings.max_read) break;
     }
+
     hash = qch.result().toHex();
+
     delete[] buffer;
     done = true;
-    //qDebug() << path << method << size << read << hash;
+    //qDebug() << "FileHasher::run" << path << method << size << read << hash;
 }
 
 int FileHasher::percent() const

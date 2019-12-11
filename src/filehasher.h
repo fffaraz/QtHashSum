@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef FILEHASHER_H
-#define FILEHASHER_H
+#pragma once
 
 #include <QRunnable>
 #include <QString>
@@ -25,10 +24,11 @@ struct Settings
 {
     explicit Settings() {}
     explicit Settings(QCryptographicHash::Algorithm method) : method(method) {}
+    QString methodStr() const;
+
     QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256;
     int prefix_len = 0; // file path prefix length
     qint64 max_read = -1;
-    QString methodStr() const;
 };
 
 struct FileHasher : public QRunnable
@@ -36,6 +36,7 @@ struct FileHasher : public QRunnable
     explicit FileHasher(const QString &path, const Settings &settings);
     virtual ~FileHasher();
     virtual void run();
+
     int percent() const;
     QString info() const;
     QString name() const;
@@ -44,10 +45,9 @@ struct FileHasher : public QRunnable
     QString path;
     Settings settings;
     QString hash; // final hash result
+
     volatile bool started = false;
     volatile bool done = false;
     volatile qint64 size = 0;
     volatile qint64 read = 0;
 };
-
-#endif // FILEHASHER_H

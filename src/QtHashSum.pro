@@ -21,7 +21,7 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
-DEFINES += APPVERSION=\\\"v1.8.0\\\"
+DEFINES += APPVERSION=\\\"v2.0.0\\\"
 
 CONFIG += c++14 release optimize_full
 msvc: QMAKE_CXXFLAGS += /std:c++latest /Zc:__cplusplus

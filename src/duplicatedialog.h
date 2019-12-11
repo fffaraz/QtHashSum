@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DUPLICATEDIALOG_H
-#define DUPLICATEDIALOG_H
+#pragma once
 
 #include <QDialog>
 
@@ -37,5 +36,3 @@ private:
 private slots:
     void remove_clicked();
 };
-
-#endif // DUPLICATEDIALOG_H

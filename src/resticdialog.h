@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef RESTICDIALOG_H
-#define RESTICDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QProcess>
@@ -47,5 +46,3 @@ private:
     QProcessEnvironment m_env;
     QProcess *m_process = nullptr;
 };
-
-#endif // RESTICDIALOG_H

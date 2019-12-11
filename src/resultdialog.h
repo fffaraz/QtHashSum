@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef RESULTDIALOG_H
-#define RESULTDIALOG_H
+#pragma once
 
 #include <QDialog>
 
@@ -34,5 +33,3 @@ public:
 private:
     Ui::ResultDialog *ui;
 };
-
-#endif // RESULTDIALOG_H

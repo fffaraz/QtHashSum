@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef PROGRESSDIALOG_H
-#define PROGRESSDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QLabel>
@@ -57,5 +56,3 @@ private:
     QTimer timer;
     QElapsedTimer elapsedtimer;
 };
-
-#endif // PROGRESSDIALOG_H

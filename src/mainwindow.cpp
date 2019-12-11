@@ -72,15 +72,15 @@ void MainWindow::on_btnStart_clicked()
 
     QFileInfo file(ui->txtFile->text());
     if(!file.exists()) return;
+
     Settings settings;
     settings.prefix_len = file.absolutePath().size();
+
     QVector<FileHasher*> jobs;
     foreach(QCryptographicHash::Algorithm method, methods)
     {
         settings.method = method;
-        FileHasher* fh = new FileHasher(file.absoluteFilePath(), settings);
-        fh->setAutoDelete(false);
-        jobs.append(fh);
+        jobs.append(new FileHasher(file.absoluteFilePath(), settings));
     }
 
     ProgressDialog *pd = new ProgressDialog(jobs, "", true, false, "", this);
@@ -127,8 +127,10 @@ void MainWindow::on_btnResticBackup_clicked()
     // mysqldump database | restic backup --stdin --stdin-filename database.sql
     // mysqldump --databases database_name -u database_user -p | restic backup --stdin --stdin-filename database_dump.sql
     // mysqldump -u database_user -p --all-databases | restic backup --stdin --stdin-filename all_databases.sql
+
     QString backup = ui->txtResticBackup->text();
     if(backup.size() < 1) return;
+
     ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose backup " + backup, getResticEnv(), this);
     rd->show();
 }
@@ -152,10 +154,13 @@ void MainWindow::on_btnResticRestore_clicked()
 {
     // restic restore $SnapshotID --target $LocationToRestoreTo --path $PathBeingRestored
     // restic restore $SnapshotID --target $LocationToRestoreTo --include $PathtoFileBeingRestored
+
     QString restore = ui->txtResticRestore->text();
     if(restore.size() < 1) return;
+
     QString snapshot = ui->txtResticSnapshot->text();
     if(snapshot.size() < 1) return;
+
     ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose restore " + snapshot + " --target " + restore, getResticEnv(), this);
     rd->show();
 }
@@ -164,6 +169,7 @@ void MainWindow::on_btnResticForget_clicked()
 {
     QString forget = ui->txtResticForget->text();
     if(forget.size() < 1) return;
+
     // --keep-last 1
     ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose " + forget, getResticEnv(), this);
     rd->show();
