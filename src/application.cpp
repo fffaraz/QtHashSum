@@ -52,9 +52,7 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
         {
             // TODO: skip ignored files (/proc, /dev, ...)
             totalsize += static_cast<quint64>(itr.fileInfo().size());
-            FileHasher* fh = new FileHasher(file, settings);
-            fh->setAutoDelete(false);
-            jobs.append(fh);
+            jobs.append(new FileHasher(file, settings));
         }
     }
     qDebug() << "Application::parseDir [items, files, totalsize]" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);

@@ -36,6 +36,7 @@ ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString dir, bool met
 {
     ui->setupUi(this);
     setWindowTitle("Progress Status (" + QString::number(jobs.size()) + " files)");
+
     QGridLayout *layout = new QGridLayout(this);
     for(int i = 0; i < qMin(QThreadPool::globalInstance()->maxThreadCount(), jobs.size()); ++i)
     {
@@ -51,10 +52,13 @@ ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString dir, bool met
         pds.append(pd);
     }
     setLayout(layout);
+
     QCoreApplication::processEvents();
     elapsedtimer.start();
+
     for(int i = 0; i < jobs.size(); ++i) QThreadPool::globalInstance()->start(jobs[i]);
     qDebug() << "All jobs started" << elapsedtimer.elapsed();
+
     connect(&timer, &QTimer::timeout, this, &ProgressDialog::timer_timeout);
     timer.start(500);
 }
@@ -68,19 +72,24 @@ void ProgressDialog::timer_timeout()
 {
     updateProgress();
     int done = 0;
-    for(int i = 0; i < jobs.size(); ++i) if(jobs[i]->done) done++;
+
+    for(int i = 0; i < jobs.size(); ++i) done += jobs[i]->done;
     setWindowTitle("Progress Status (" + QString::number(done) + " / " + QString::number(jobs.size()) + " files done, " + QString::number(100 * done / jobs.size()) + "%)");
+
     if(done == jobs.size()) allDone();
 }
 
 void ProgressDialog::updateProgress()
 {
     int used = 0;
-    for(int i = 0; i < jobs.size() && used < pds.size(); ++i) if(jobs[i]->started && (!jobs[i]->done || jobs.size() - i <= pds.size() - used))
+    for(int i = 0; i < jobs.size() && used < pds.size(); ++i)
     {
-        pds[used].pb->setValue(jobs[i]->percent());
-        pds[used].label->setText(QString::number(i + 1) + "  " + jobs[i]->info());
-        used++;
+        if(jobs[i]->started && (!jobs[i]->done || jobs.size() - i <= pds.size() - used))
+        {
+            pds[used].pb->setValue(jobs[i]->percent());
+            pds[used].label->setText(QString::number(i + 1) + "  " + jobs[i]->info());
+            used++;
+        }
     }
     QCoreApplication::processEvents();
 }
