@@ -117,7 +117,7 @@ QProcessEnvironment MainWindow::getResticEnv()
 
 void MainWindow::on_btnResticInit_clicked()
 {
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose init", getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 init", getResticEnv(), this);
     rd->show();
 }
 
@@ -131,7 +131,7 @@ void MainWindow::on_btnResticBackup_clicked()
     QString backup = ui->txtResticBackup->text();
     if(backup.size() < 1) return;
 
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose backup " + backup, getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 backup " + backup, getResticEnv(), this);
     rd->show();
 }
 
@@ -139,14 +139,14 @@ void MainWindow::on_btnResticCheck_clicked()
 {
     // --read-data
     // --read-data-subset=1/5
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose check", getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 check", getResticEnv(), this);
     rd->show();
 }
 
 void MainWindow::on_btnResticSnapshots_clicked()
 {
     // restic diff $SnapshotID1 $SnapshotID2
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose snapshots", getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 snapshots", getResticEnv(), this);
     rd->show();
 }
 
@@ -161,7 +161,7 @@ void MainWindow::on_btnResticRestore_clicked()
     QString snapshot = ui->txtResticSnapshot->text();
     if(snapshot.size() < 1) return;
 
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose restore " + snapshot + " --target " + restore, getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 restore " + snapshot + " --target " + restore, getResticEnv(), this);
     rd->show();
 }
 
@@ -171,12 +171,12 @@ void MainWindow::on_btnResticForget_clicked()
     if(forget.size() < 1) return;
 
     // --keep-last 1
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose " + forget, getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 " + forget, getResticEnv(), this);
     rd->show();
 }
 
 void MainWindow::on_btnResticPrune_clicked()
 {
-    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose --verbose prune", getResticEnv(), this);
+    ResticDialog *rd = new ResticDialog(ui->txtRestic->text(), "--verbose=2 prune", getResticEnv(), this);
     rd->show();
 }
