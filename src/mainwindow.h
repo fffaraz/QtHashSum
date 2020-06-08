@@ -21,7 +21,8 @@
 
 #include "application.h"
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -29,11 +30,11 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
+  public:
     explicit MainWindow(Application *application, QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+  private slots:
     void on_btnBrowse_clicked();
     void on_btnStart_clicked();
     void on_btnBrowseDir_clicked();
@@ -47,7 +48,7 @@ private slots:
     void on_btnResticForget_clicked();
     void on_btnResticPrune_clicked();
 
-private:
+  private:
     Ui::MainWindow *ui = nullptr;
     Application *application = nullptr;
     QProcessEnvironment getResticEnv();

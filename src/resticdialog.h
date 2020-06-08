@@ -19,7 +19,8 @@
 #include <QDialog>
 #include <QProcess>
 
-namespace Ui {
+namespace Ui
+{
 class ResticDialog;
 }
 
@@ -27,11 +28,11 @@ class ResticDialog : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ResticDialog(QString cmd, QString args, QProcessEnvironment env, QWidget *parent = nullptr);
     ~ResticDialog();
 
-private slots:
+  private slots:
     void on_btnRun_clicked();
     void process_errorOccurred(QProcess::ProcessError error);
     void process_finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -40,7 +41,7 @@ private slots:
     void process_started();
     void process_stateChanged(QProcess::ProcessState newState);
 
-private:
+  private:
     Ui::ResticDialog *ui;
     QString m_cmd;
     QProcessEnvironment m_env;

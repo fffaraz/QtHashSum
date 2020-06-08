@@ -22,9 +22,9 @@
 
 class Application
 {
-public:
+  public:
     Application();
-    QVector<FileHasher*> parseDir(QString dir, QCryptographicHash::Algorithm method);
+    QVector<FileHasher *> parseDir(QString dir, QCryptographicHash::Algorithm method);
     QProcessEnvironment getResticEnv(QString b2id, QString b2key, QString repo, QString pass);
     void setMaxThreadCount(int threads);
     int maxThreadCount = 0;

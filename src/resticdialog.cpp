@@ -23,22 +23,22 @@
 #include <windows.h>
 #endif
 
-ResticDialog::ResticDialog(QString cmd, QString args, QProcessEnvironment env, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ResticDialog)
+ResticDialog::ResticDialog(QString cmd, QString args, QProcessEnvironment env, QWidget *parent)
+    : QDialog(parent), ui(new Ui::ResticDialog)
 {
     m_cmd = cmd;
     m_env = env;
     ui->setupUi(this);
     ui->txtArgs->setText(args);
-    for(const QString &key : env.keys()) ui->txtStatus->appendPlainText(key + " = " + env.value(key));
+    for (const QString &key : env.keys())
+        ui->txtStatus->appendPlainText(key + " = " + env.value(key));
     this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 ResticDialog::~ResticDialog()
 {
     qDebug() << "ResticDialog::~ResticDialog";
-    if(m_process != nullptr)
+    if (m_process != nullptr)
     {
         delete m_process;
     }
@@ -52,8 +52,7 @@ void ResticDialog::on_btnRun_clicked()
     m_process = new QProcess();
 
 #ifdef Q_OS_WIN
-    m_process->setCreateProcessArgumentsModifier([] (QProcess::CreateProcessArguments *args)
-    {
+    m_process->setCreateProcessArgumentsModifier([](QProcess::CreateProcessArguments *args) {
         args->flags |= CREATE_NEW_CONSOLE;
         args->startupInfo->dwFlags &= ~STARTF_USESTDHANDLES;
         args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
@@ -66,14 +65,15 @@ void ResticDialog::on_btnRun_clicked()
     m_process->setProcessChannelMode(QProcess::SeparateChannels);
 
     connect(m_process, &QProcess::errorOccurred, this, &ResticDialog::process_errorOccurred);
-    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &ResticDialog::process_finished);
+    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+            &ResticDialog::process_finished);
     connect(m_process, &QProcess::readyReadStandardError, this, &ResticDialog::process_readyReadStandardError);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ResticDialog::process_readyReadStandardOutput);
     connect(m_process, &QProcess::started, this, &ResticDialog::process_started);
     connect(m_process, &QProcess::stateChanged, this, &ResticDialog::process_stateChanged);
 
     m_process->start("cmd.exe /K " + m_cmd + " " + ui->txtArgs->text());
-    //m_process->closeWriteChannel();
+    // m_process->closeWriteChannel();
 }
 
 void ResticDialog::process_errorOccurred(QProcess::ProcessError error)
@@ -85,7 +85,8 @@ void ResticDialog::process_errorOccurred(QProcess::ProcessError error)
 void ResticDialog::process_finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qDebug() << "ResticDialog::process_finished" << exitCode << exitStatus;
-    ui->txtStatus->appendPlainText("finished: " + QString::number(exitCode) + " " + QVariant::fromValue(exitStatus).value<QString>());
+    ui->txtStatus->appendPlainText("finished: " + QString::number(exitCode) + " " +
+                                   QVariant::fromValue(exitStatus).value<QString>());
 }
 
 void ResticDialog::process_readyReadStandardError()

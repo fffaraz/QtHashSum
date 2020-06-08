@@ -30,10 +30,10 @@ void cli(QString dir)
     QStringList files;
     qint64 size = 0;
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
-    while(itr.hasNext())
+    while (itr.hasNext())
     {
         QString file = itr.next();
-        if(itr.fileInfo().isFile())
+        if (itr.fileInfo().isFile())
         {
             files.append(file);
             size += itr.fileInfo().size();
@@ -44,7 +44,7 @@ void cli(QString dir)
     Settings settings;
     settings.method = QCryptographicHash::Algorithm::Sha3_256;
     settings.prefix_len = dir.size();
-    for(int i = 0; i < files.size(); ++i)
+    for (int i = 0; i < files.size(); ++i)
     {
         FileHasher fh(files[i], settings);
         fh.run();
@@ -54,7 +54,7 @@ void cli(QString dir)
 
 void benchmark(QString file)
 {
-    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
+    for (int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
     {
         Settings settings(static_cast<QCryptographicHash::Algorithm>(i));
         FileHasher fh(file, settings);
@@ -83,9 +83,10 @@ SHA224   17330 17501
 int main(int argc, char *argv[])
 {
     Application application;
-    if(argc < 2)
+    if (argc < 2)
     {
-        qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version" << qVersion() << "CPP" << __cplusplus;
+        qDebug() << "QtHashSum " APPVERSION " compiled with Qt version " QT_VERSION_STR " and run-time version"
+                 << qVersion() << "CPP" << __cplusplus;
         QApplication app(argc, argv);
         MainWindow w(&application);
         w.show();
@@ -94,8 +95,10 @@ int main(int argc, char *argv[])
     else
     {
         QString dir = argv[1];
-        if(dir == "-b") benchmark(argv[2]);
-        else cli(dir);
+        if (dir == "-b")
+            benchmark(argv[2]);
+        else
+            cli(dir);
         return 0;
     }
 }

@@ -16,14 +16,18 @@
 
 #pragma once
 
+#include <QCryptographicHash>
 #include <QRunnable>
 #include <QString>
-#include <QCryptographicHash>
 
 struct Settings
 {
-    explicit Settings() {}
-    explicit Settings(QCryptographicHash::Algorithm method) : method(method) {}
+    explicit Settings()
+    {
+    }
+    explicit Settings(QCryptographicHash::Algorithm method) : method(method)
+    {
+    }
     QString methodStr() const;
 
     QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256;
