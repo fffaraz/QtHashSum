@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <QDebug>
-#include <QThreadPool>
-#include <QDirIterator>
 #include <QCoreApplication>
+#include <QDebug>
+#include <QDirIterator>
+#include <QThreadPool>
 
 #include "application.h"
 
@@ -33,12 +33,12 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;
     quint64 totalSize = 0;
-    QVector<FileHasher*> jobs;
-    while(itr.hasNext())
+    QVector<FileHasher *> jobs;
+    while (itr.hasNext())
     {
         items++;
 
-        if(items % 1000 == 0)
+        if (items % 1000 == 0)
         {
             qDebug() << "items, totalsize" << items << 1.0 * totalSize / (1024 * 1024 * 1024);
             // TODO: file listing progress -> main windows status bar
@@ -46,14 +46,15 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
         }
 
         QString file = itr.next();
-        if(itr.fileInfo().isFile())
+        if (itr.fileInfo().isFile())
         {
             // TODO: skip ignored files (/proc, /dev, ...)
             totalSize += static_cast<quint64>(itr.fileInfo().size());
             jobs.append(new FileHasher(file, settings));
         }
     }
-    qDebug() << "Application::parseDir [items, files, totalsize]" << items << jobs.size() << 1.0 * totalSize / (1024 * 1024 * 1024);
+    qDebug() << "Application::parseDir [items, files, totalsize]" << items << jobs.size()
+             << 1.0 * totalSize / (1024 * 1024 * 1024);
     return jobs;
 }
 
@@ -77,7 +78,7 @@ QProcessEnvironment Application::getResticEnv(QString b2id, QString b2key, QStri
 void Application::setMaxThreadCount(int threads)
 {
     qDebug() << "Application::setMaxThreadCount [num, max]" << threads << m_maxThreadCount;
-    if(threads < 1)
+    if (threads < 1)
         QThreadPool::globalInstance()->setMaxThreadCount(m_maxThreadCount);
     else
         QThreadPool::globalInstance()->setMaxThreadCount(threads);

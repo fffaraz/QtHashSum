@@ -9,9 +9,5 @@ FileHasherSettings::FileHasherSettings(QCryptographicHash::Algorithm method, int
 
 QString FileHasherSettings::methodStr() const
 {
-    return QVariant::fromValue(m_method)
-            .value<QString>()
-            .toUpper()
-            .replace('_', '-')
-            .replace("REALSHA", "SHA");
+    return QVariant::fromValue(m_method).value<QString>().toUpper().replace('_', '-').replace("REALSHA", "SHA");
 }

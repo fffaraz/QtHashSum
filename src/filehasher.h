@@ -22,21 +22,21 @@
 
 class FileHasher : public QRunnable
 {
-public:
+  public:
     explicit FileHasher(const QString &path, const FileHasherSettings &settings);
     virtual ~FileHasher() = default;
     virtual void run();
 
-    int percent() const; //< (m_read / m_size) * 100
-    qint64 size() const; //< File size
-    QString info() const; //< "METHOD SIZE NAME"
-    QString name() const; //< File path without root dir
-    QString hash() const; //< Final result
+    int percent() const;       //< (m_read / m_size) * 100
+    qint64 size() const;       //< File size
+    QString info() const;      //< "METHOD SIZE NAME"
+    QString name() const;      //< File path without root dir
+    QString hash() const;      //< Final result
     QString methodStr() const; //< Hash method name
     bool started() const;
     bool done() const;
 
-private:
+  private:
     QString m_path;
     QString m_hash; // Final hash result
     FileHasherSettings m_settings;

@@ -22,14 +22,14 @@
 
 class Application
 {
-public:
+  public:
     explicit Application();
     void setMaxThreadCount(int threads);
     int maxThreadCount() const;
 
-    static QVector<FileHasher*> parseDir(QString dir, QCryptographicHash::Algorithm method);
+    static QVector<FileHasher *> parseDir(QString dir, QCryptographicHash::Algorithm method);
     static QProcessEnvironment getResticEnv(QString b2id, QString b2key, QString repo, QString pass);
 
-private:
+  private:
     int m_maxThreadCount = 0;
 };

@@ -25,22 +25,22 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-DuplicateDialog::DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DuplicateDialog)
+DuplicateDialog::DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent)
+    : QDialog(parent), ui(new Ui::DuplicateDialog)
 {
     ui->setupUi(this);
     QGridLayout *layout = new QGridLayout(this);
 
     bool matchNames = true;
     qint64 fileSize = 0;
-    for(int i = 0; i < pathList.size(); ++i)
+    for (int i = 0; i < pathList.size(); ++i)
     {
-        if(i != 0)
+        if (i != 0)
         {
             QFileInfo fileinfo1(parentDir + pathList[i]);
             QFileInfo fileinfo2(parentDir + pathList[i - 1]);
-            if(fileinfo1.fileName() != fileinfo2.fileName()) matchNames = false;
+            if (fileinfo1.fileName() != fileinfo2.fileName())
+                matchNames = false;
         }
         else
         {
@@ -55,10 +55,10 @@ DuplicateDialog::DuplicateDialog(const QList<QString> &pathList, QString parentD
         QObject::connect(button, &QPushButton::clicked, this, &DuplicateDialog::btnRemove_clicked);
         layout->addWidget(button, i, 1);
 
-        //qDebug() << "DuplicateDialog" << i << dir + pathlist[i];
+        // qDebug() << "DuplicateDialog" << i << dir + pathlist[i];
     }
     layout->addWidget(new QLabel("Size: " + QString::number(fileSize), this));
-    if(matchNames)
+    if (matchNames)
     {
         layout->addWidget(new QLabel("All files have the same name", this));
     }
@@ -72,15 +72,16 @@ DuplicateDialog::~DuplicateDialog()
 
 void DuplicateDialog::btnRemove_clicked()
 {
-    QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if(button != nullptr)
+    QPushButton *button = qobject_cast<QPushButton *>(sender());
+    if (button != nullptr)
     {
         QFile file(button->statusTip());
         qDebug() << "Removed" << file.fileName() << file.size();
-        if(file.exists())
+        if (file.exists())
         {
             bool ok = file.remove();
-            if(!ok) QMessageBox::warning(this, "", "Remove failed!");
+            if (!ok)
+                QMessageBox::warning(this, "", "Remove failed!");
         }
         else
         {

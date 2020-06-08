@@ -17,10 +17,10 @@
 #pragma once
 
 #include <QDialog>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QProgressBar>
 #include <QTimer>
-#include <QElapsedTimer>
 
 #include "filehasher.h"
 
@@ -30,7 +30,8 @@ struct ProgressData
     QLabel *label = nullptr;
 };
 
-namespace Ui {
+namespace Ui
+{
 class ProgressDialog;
 }
 
@@ -38,18 +39,19 @@ class ProgressDialog : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit ProgressDialog(QVector<FileHasher*> jobs, QString parentDir, bool methodName, bool removeDups, QString format, QWidget *parent);
+  public:
+    explicit ProgressDialog(QVector<FileHasher *> jobs, QString parentDir, bool methodName, bool removeDups,
+                            QString format, QWidget *parent);
     ~ProgressDialog();
 
-private:
+  private:
     Ui::ProgressDialog *ui;
 
     void timer_timeout();
     void updateProgress();
     void allDone();
 
-    QVector<FileHasher*> m_jobs;
+    QVector<FileHasher *> m_jobs;
     QString m_parentDir;
     bool m_methodName;
     bool m_removeDups;

@@ -15,13 +15,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QDebug>
-#include <QThread>
 #include <QFile>
+#include <QThread>
 
 #include "filehasher.h"
 
-FileHasher::FileHasher(const QString &path, const FileHasherSettings &settings) :
-    m_path(path), m_settings(settings)
+FileHasher::FileHasher(const QString &path, const FileHasherSettings &settings) : m_path(path), m_settings(settings)
 {
     setAutoDelete(false);
 }
@@ -31,7 +30,7 @@ void FileHasher::run()
     QThread::currentThread()->setPriority(QThread::LowPriority);
 
     QFile file(m_path);
-    if(!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
+    if (!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
     {
         m_started = m_done = true;
         m_hash = "FILE_ERROR: " + file.errorString();
@@ -39,7 +38,7 @@ void FileHasher::run()
     }
 
     m_size = file.size();
-    if(m_size < 0)
+    if (m_size < 0)
     {
         m_started = m_done = true;
         m_hash = "FILE_ERROR: size < 0";
@@ -53,11 +52,12 @@ void FileHasher::run()
 
     QCryptographicHash qch(m_settings.method());
     qint64 len = 0;
-    while((len = file.read(buffer, bufferSize)) > 0)
+    while ((len = file.read(buffer, bufferSize)) > 0)
     {
         m_read += len;
         qch.addData(buffer, static_cast<int>(len));
-        if(m_settings.maxRead() >= 0 && m_read >= m_settings.maxRead()) break;
+        if (m_settings.maxRead() >= 0 && m_read >= m_settings.maxRead())
+            break;
     }
 
     delete[] buffer;
@@ -68,7 +68,8 @@ void FileHasher::run()
 
 int FileHasher::percent() const
 {
-    if(m_size < 1) return 0;
+    if (m_size < 1)
+        return 0;
     return static_cast<int>(100 * m_read / m_size);
 }
 

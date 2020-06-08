@@ -18,7 +18,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class DuplicateDialog;
 }
 
@@ -26,13 +27,13 @@ class DuplicateDialog : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
     explicit DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent = nullptr);
     ~DuplicateDialog();
 
-private:
+  private:
     Ui::DuplicateDialog *ui;
 
-private slots:
+  private slots:
     void btnRemove_clicked();
 };
