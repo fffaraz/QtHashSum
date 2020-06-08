@@ -40,7 +40,7 @@ class ProgressDialog : public QDialog
     Q_OBJECT
 
   public:
-    explicit ProgressDialog(QVector<FileHasher *> jobs, QString parentDir, bool methodName, bool removeDups,
+    explicit ProgressDialog(const QVector<FileHasher *> &jobs, QString parentDir, bool methodName, bool removeDups,
                             QString format, QWidget *parent);
     ~ProgressDialog();
 

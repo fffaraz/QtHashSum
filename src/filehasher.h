@@ -38,7 +38,7 @@ class FileHasher : public QRunnable
 
   private:
     QString m_path;
-    QString m_hash; // Final hash result
+    QString m_hash; //< Final hash result
     FileHasherSettings m_settings;
 
     volatile bool m_started = false;

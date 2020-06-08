@@ -25,7 +25,7 @@
 #include "duplicatedialog.h"
 #include "resultdialog.h"
 
-ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString parentDir, bool methodName, bool removeDups,
+ProgressDialog::ProgressDialog(const QVector<FileHasher *> &jobs, QString parentDir, bool methodName, bool removeDups,
                                QString format, QWidget *parent = nullptr)
     : QDialog(parent), ui(new Ui::ProgressDialog), m_jobs(jobs), m_parentDir(parentDir), m_methodName(methodName),
       m_removeDups(removeDups), m_format(format)

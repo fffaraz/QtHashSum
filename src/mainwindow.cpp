@@ -129,7 +129,8 @@ void MainWindow::on_btnResticBackup_clicked()
     // --exclude .cache --exclude .local
     // mysqldump database | restic backup --stdin --stdin-filename database.sql
     // mysqldump --databases database_name -u database_user -p | restic backup --stdin --stdin-filename
-    // database_dump.sql mysqldump -u database_user -p --all-databases | restic backup --stdin --stdin-filename
+    // database_dump.sql
+    // mysqldump -u database_user -p --all-databases | restic backup --stdin --stdin-filename
     // all_databases.sql
 
     QString backup = ui->txtResticBackup->text();
