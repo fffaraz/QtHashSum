@@ -18,7 +18,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class ResultDialog;
 }
 
@@ -26,10 +27,10 @@ class ResultDialog : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
     explicit ResultDialog(QString result, QWidget *parent = nullptr);
     ~ResultDialog();
 
-private:
+  private:
     Ui::ResultDialog *ui;
 };
