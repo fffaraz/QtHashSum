@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,9 +23,13 @@
 class Application
 {
 public:
-    Application();
-    QVector<FileHasher*> parseDir(QString dir, QCryptographicHash::Algorithm method);
-    QProcessEnvironment getResticEnv(QString b2id, QString b2key, QString repo, QString pass);
+    explicit Application();
     void setMaxThreadCount(int threads);
-    int maxThreadCount = 0;
+    int maxThreadCount() const;
+
+    static QVector<FileHasher*> parseDir(QString dir, QCryptographicHash::Algorithm method);
+    static QProcessEnvironment getResticEnv(QString b2id, QString b2key, QString repo, QString pass);
+
+private:
+    int m_maxThreadCount = 0;
 };

@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,18 +23,16 @@
 
 Application::Application()
 {
-    maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
+    m_maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
 }
 
 QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Algorithm method)
 {
-    Settings settings;
-    settings.prefix_len = dir.size();
-    settings.method = method;
+    FileHasherSettings settings(method, dir.size());
 
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;
-    quint64 totalsize = 0;
+    quint64 totalSize = 0;
     QVector<FileHasher*> jobs;
     while(itr.hasNext())
     {
@@ -42,7 +40,7 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
 
         if(items % 1000 == 0)
         {
-            qDebug() << "items, totalsize" << items << 1.0 * totalsize / (1024 * 1024 * 1024);
+            qDebug() << "items, totalsize" << items << 1.0 * totalSize / (1024 * 1024 * 1024);
             // TODO: file listing progress -> main windows status bar
             QCoreApplication::processEvents();
         }
@@ -51,22 +49,41 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
         if(itr.fileInfo().isFile())
         {
             // TODO: skip ignored files (/proc, /dev, ...)
-            totalsize += static_cast<quint64>(itr.fileInfo().size());
+            totalSize += static_cast<quint64>(itr.fileInfo().size());
             jobs.append(new FileHasher(file, settings));
         }
     }
-    qDebug() << "Application::parseDir [items, files, totalsize]" << items << jobs.size() << 1.0 * totalsize / (1024 * 1024 * 1024);
+    qDebug() << "Application::parseDir [items, files, totalsize]" << items << jobs.size() << 1.0 * totalSize / (1024 * 1024 * 1024);
     return jobs;
 }
 
 QProcessEnvironment Application::getResticEnv(QString b2id, QString b2key, QString repo, QString pass)
 {
-    return QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment sysEnv = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment result;
+    result.insert("TMP", sysEnv.value("TMP")); // https://golang.org/pkg/os/#TempDir
+    result.insert("LOCALAPPDATA", sysEnv.value("LOCALAPPDATA"));
+    result.insert("B2_ACCOUNT_ID", b2id);
+    result.insert("B2_ACCOUNT_KEY", b2key);
+    result.insert("RESTIC_REPOSITORY", repo);
+    result.insert("RESTIC_PASSWORD", pass);
+    // AWS_ACCESS_KEY_ID
+    // AWS_SECRET_ACCESS_KEY
+    // s3:s3.wasabisys.com/my-backup-bucket
+    // b2:bucket:folder
+    return result;
 }
 
 void Application::setMaxThreadCount(int threads)
 {
-    qDebug() << "Application::setMaxThreadCount [num, max]" << threads << maxThreadCount;
-    if(threads < 1) QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
-    else QThreadPool::globalInstance()->setMaxThreadCount(threads);
+    qDebug() << "Application::setMaxThreadCount [num, max]" << threads << m_maxThreadCount;
+    if(threads < 1)
+        QThreadPool::globalInstance()->setMaxThreadCount(m_maxThreadCount);
+    else
+        QThreadPool::globalInstance()->setMaxThreadCount(threads);
+}
+
+int Application::maxThreadCount() const
+{
+    return m_maxThreadCount;
 }

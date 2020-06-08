@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>638</width>
-    <height>390</height>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabFile">
        <attribute name="title">
@@ -38,7 +38,7 @@
            <widget class="QLineEdit" name="txtFile"/>
           </item>
           <item>
-           <widget class="QPushButton" name="btnBrowse">
+           <widget class="QPushButton" name="btnBrowseFile">
             <property name="maximumSize">
              <size>
               <width>30</width>
@@ -132,7 +132,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="btnStart">
+           <widget class="QPushButton" name="btnStartFile">
             <property name="text">
              <string>Start</string>
             </property>
@@ -384,7 +384,7 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QLabel" name="lblAbout_2">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;QtHashSum: File Checksum Integrity Verifier &amp;amp; Duplicate File Finder&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Copyright (C) 2019 Faraz Fallahi &amp;lt;fffaraz@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This program is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;it under the terms of the GNU General Public License.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This program comes with ABSOLUTELY NO WARRANTY.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;QtHashSum: File Checksum Integrity Verifier &amp;amp; Duplicate File Finder&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Copyright (C) 2019-2020 Faraz Fallahi &amp;lt;fffaraz@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This program is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;it under the terms of the GNU General Public License.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This program comes with ABSOLUTELY NO WARRANTY.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -608,7 +608,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>638</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

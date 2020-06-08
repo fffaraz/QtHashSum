@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,20 +39,22 @@ class ProgressDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ProgressDialog(QVector<FileHasher*> jobs, QString dir, bool methodName, bool removeDups, QString format, QWidget *parent);
+    explicit ProgressDialog(QVector<FileHasher*> jobs, QString parentDir, bool methodName, bool removeDups, QString format, QWidget *parent);
     ~ProgressDialog();
 
 private:
+    Ui::ProgressDialog *ui;
+
     void timer_timeout();
     void updateProgress();
     void allDone();
-    Ui::ProgressDialog *ui;
-    QVector<FileHasher*> jobs;
-    QString dir;
-    bool methodName;
-    bool removeDups;
-    QString format;
-    QVector<ProgressData> pds;
-    QTimer timer;
-    QElapsedTimer elapsedtimer;
+
+    QVector<FileHasher*> m_jobs;
+    QString m_parentDir;
+    bool m_methodName;
+    bool m_removeDups;
+    QString m_format;
+    QVector<ProgressData> m_pds;
+    QTimer m_timer;
+    QElapsedTimer m_elapsedTimer;
 };

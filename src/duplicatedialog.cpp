@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,33 +25,43 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-DuplicateDialog::DuplicateDialog(const QList<QString> &pathlist, QString dir, QWidget *parent) :
+DuplicateDialog::DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DuplicateDialog)
 {
     ui->setupUi(this);
     QGridLayout *layout = new QGridLayout(this);
+
     bool matchNames = true;
-    qint64 filesize = 0;
-    for(int i = 0; i < pathlist.size(); ++i)
+    qint64 fileSize = 0;
+    for(int i = 0; i < pathList.size(); ++i)
     {
         if(i != 0)
         {
-            QFileInfo fileinfo1(dir + pathlist[i]);
-            QFileInfo fileinfo2(dir + pathlist[i - 1]);
+            QFileInfo fileinfo1(parentDir + pathList[i]);
+            QFileInfo fileinfo2(parentDir + pathList[i - 1]);
             if(fileinfo1.fileName() != fileinfo2.fileName()) matchNames = false;
         }
-        else filesize = QFileInfo(dir + pathlist[i]).size();
-        QLabel *label = new QLabel(pathlist[i], this);
+        else
+        {
+            fileSize = QFileInfo(parentDir + pathList[i]).size();
+        }
+
+        QLabel *label = new QLabel(pathList[i], this);
         layout->addWidget(label, i, 0);
+
         QPushButton *button = new QPushButton("Remove", this);
-        button->setStatusTip(dir + pathlist[i]);
-        //qDebug() << "DuplicateDialog" << i << dir + pathlist[i];
-        connect(button, SIGNAL(clicked()), this, SLOT(remove_clicked()));
+        button->setStatusTip(parentDir + pathList[i]);
+        QObject::connect(button, &QPushButton::clicked, this, &DuplicateDialog::btnRemove_clicked);
         layout->addWidget(button, i, 1);
+
+        //qDebug() << "DuplicateDialog" << i << dir + pathlist[i];
     }
-    layout->addWidget(new QLabel("Size: " + QString::number(filesize), this));
-    if(matchNames) layout->addWidget(new QLabel("All files have the same name", this));
+    layout->addWidget(new QLabel("Size: " + QString::number(fileSize), this));
+    if(matchNames)
+    {
+        layout->addWidget(new QLabel("All files have the same name", this));
+    }
     setLayout(layout);
 }
 
@@ -60,7 +70,7 @@ DuplicateDialog::~DuplicateDialog()
     delete ui;
 }
 
-void DuplicateDialog::remove_clicked()
+void DuplicateDialog::btnRemove_clicked()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if(button != nullptr)

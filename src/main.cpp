@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@
 void cli(QString dir)
 {
     QStringList files;
-    qint64 size = 0;
+    qint64 totalSize = 0;
+
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     while(itr.hasNext())
     {
@@ -36,19 +37,18 @@ void cli(QString dir)
         if(itr.fileInfo().isFile())
         {
             files.append(file);
-            size += itr.fileInfo().size();
+            totalSize += itr.fileInfo().size();
         }
     }
-    std::cout << files.size() << " files hashed, " << size / 1048576 << " MB total" << std::endl;
+    std::cout << files.size() << " files, " << totalSize / (1024 * 1024) << " MB total" << std::endl;
     files.sort(Qt::CaseSensitivity::CaseInsensitive);
-    Settings settings;
-    settings.method = QCryptographicHash::Algorithm::Sha3_256;
-    settings.prefix_len = dir.size();
+
+    FileHasherSettings settings(QCryptographicHash::Algorithm::Sha3_256, dir.size());
     for(int i = 0; i < files.size(); ++i)
     {
         FileHasher fh(files[i], settings);
         fh.run();
-        std::cout << fh.hash.toStdString() << " " << fh.size << " " << fh.name().toStdString() << std::endl;
+        std::cout << fh.hash().toStdString() << " " << fh.size() << " " << fh.name().toStdString() << std::endl;
     }
 }
 
@@ -56,29 +56,15 @@ void benchmark(QString file)
 {
     for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
     {
-        Settings settings(static_cast<QCryptographicHash::Algorithm>(i));
+        FileHasherSettings settings(static_cast<QCryptographicHash::Algorithm>(i));
         FileHasher fh(file, settings);
         QElapsedTimer timer;
         timer.start();
         fh.run();
         qint64 elapsed = timer.elapsed();
-        std::cout << fh.methodStr().toStdString() << " " << fh.hash.toStdString() << " " << elapsed << std::endl;
+        std::cout << fh.methodStr().toStdString() << "\t" << fh.hash().toStdString() << "\t" << elapsed << std::endl;
     }
 }
-
-/*
-MD4       3123  3163
-MD5       4315  4415
-SHA1      4608  4660
-SHA3-224  6742  6898
-SHA3-256  7098  7306
-SHA3-384  9091  9287
-SHA3-512 12677 13065
-SHA512   12928 13217
-SHA384   13043 13183
-SHA256   17487 17458
-SHA224   17330 17501
-*/
 
 int main(int argc, char *argv[])
 {
@@ -99,15 +85,3 @@ int main(int argc, char *argv[])
         return 0;
     }
 }
-
-// TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
-// TODO: sort duplicates by product of count x size
-// TODO: add none (or very fast: hash of size + first 1mb) to the list of hashing methods (list only)
-// TODO: add icon
-// TODO: add QElapsedTimer
-// TODO: https://github.com/Cyan4973/xxHash
-// TODO: https://github.com/cmuratori/meow_hash
-// TODO: ignore */desktop.ini, /.git/* in Create Digest tab
-// TODO: empty file/folder find & delete
-// TODO: restic save settings
-// TODO: restic combobox

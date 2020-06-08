@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,9 +33,12 @@ public:
     explicit MainWindow(Application *application, QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+  virtual void closeEvent(QCloseEvent *event);
+
 private slots:
-    void on_btnBrowse_clicked();
-    void on_btnStart_clicked();
+    void on_btnBrowseFile_clicked();
+    void on_btnStartFile_clicked();
     void on_btnBrowseDir_clicked();
     void on_btnStartDir_clicked();
     void on_cmbThreads_currentIndexChanged(const QString &arg1);
@@ -50,5 +53,5 @@ private slots:
 private:
     Ui::MainWindow *ui = nullptr;
     Application *application = nullptr;
-    QProcessEnvironment getResticEnv();
+    QProcessEnvironment getResticEnv() const;
 };

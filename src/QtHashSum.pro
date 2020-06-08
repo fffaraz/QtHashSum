@@ -1,5 +1,5 @@
 # QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-# Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+# Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,39 +18,42 @@ QT += core gui widgets
 
 TARGET = QtHashSum
 TEMPLATE = app
+
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
-DEFINES += APPVERSION=\\\"v2.0.0\\\"
+DEFINES += APPVERSION=\\\"v3.0.0\\\"
 
 CONFIG += c++14 release optimize_full
 msvc: QMAKE_CXXFLAGS += /std:c++latest /Zc:__cplusplus
 
 SOURCES += \
     application.cpp \
+    duplicatedialog.cpp \
+    filehasher.cpp \
+    filehashersettings.cpp \
     main.cpp \
     mainwindow.cpp \
-    filehasher.cpp \
     progressdialog.cpp \
-    resultdialog.cpp \
     resticdialog.cpp \
-    duplicatedialog.cpp
+    resultdialog.cpp
 
 HEADERS += \
     application.h \
-    mainwindow.h \
+    duplicatedialog.h \
     filehasher.h \
+    filehashersettings.h \
+    mainwindow.h \
     progressdialog.h \
-    resultdialog.h \
     resticdialog.h \
-    duplicatedialog.h
+    resultdialog.h
 
 FORMS += \
+    duplicatedialog.ui \
     mainwindow.ui \
     progressdialog.ui \
-    resultdialog.ui \
     resticdialog.ui \
-    duplicatedialog.ui
+    resultdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

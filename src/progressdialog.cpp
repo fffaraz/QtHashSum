@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,14 +25,14 @@
 #include "resultdialog.h"
 #include "duplicatedialog.h"
 
-ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString dir, bool methodName, bool removeDups, QString format, QWidget *parent = nullptr) :
-    QDialog(parent),
+ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString parentDir, bool methodName, bool removeDups, QString format, QWidget *parent = nullptr)
+    : QDialog(parent),
     ui(new Ui::ProgressDialog),
-    jobs(jobs),
-    dir(dir),
-    methodName(methodName),
-    removeDups(removeDups),
-    format(format)
+    m_jobs(jobs),
+    m_parentDir(parentDir),
+    m_methodName(methodName),
+    m_removeDups(removeDups),
+    m_format(format)
 {
     ui->setupUi(this);
     setWindowTitle("Progress Status (" + QString::number(jobs.size()) + " files)");
@@ -49,18 +49,18 @@ ProgressDialog::ProgressDialog(QVector<FileHasher *> jobs, QString dir, bool met
         pd.label->setText(QString::number(i + 1) + " " + jobs[i]->info());
         layout->addWidget(pd.label);
         layout->addWidget(pd.pb);
-        pds.append(pd);
+        m_pds.append(pd);
     }
     setLayout(layout);
 
     QCoreApplication::processEvents();
-    elapsedtimer.start();
+    m_elapsedTimer.start();
 
     for(int i = 0; i < jobs.size(); ++i) QThreadPool::globalInstance()->start(jobs[i]);
-    qDebug() << "All jobs started" << elapsedtimer.elapsed();
+    qDebug() << "All jobs started" << m_elapsedTimer.elapsed();
 
-    connect(&timer, &QTimer::timeout, this, &ProgressDialog::timer_timeout);
-    timer.start(500);
+    connect(&m_timer, &QTimer::timeout, this, &ProgressDialog::timer_timeout);
+    m_timer.start(500);
 }
 
 ProgressDialog::~ProgressDialog()
@@ -71,24 +71,31 @@ ProgressDialog::~ProgressDialog()
 void ProgressDialog::timer_timeout()
 {
     updateProgress();
-    int done = 0;
 
-    for(int i = 0; i < jobs.size(); ++i) done += jobs[i]->done;
-    setWindowTitle("Progress Status (" + QString::number(done) + " / " + QString::number(jobs.size()) + " files done, " + QString::number(100 * done / jobs.size()) + "%)");
+    int numDone = 0;
+    for(int i = 0; i < m_jobs.size(); ++i)
+        numDone += m_jobs[i]->done();
 
-    if(done == jobs.size()) allDone();
+    int percentDone = 100 * numDone / m_jobs.size();
+    setWindowTitle("Progress Status (" + QString::number(numDone) + " / " + QString::number(m_jobs.size()) + " files done, " + QString::number(percentDone) + "%)");
+
+    if(numDone == m_jobs.size())
+        allDone();
 }
 
 void ProgressDialog::updateProgress()
 {
-    int used = 0;
-    for(int i = 0; i < jobs.size() && used < pds.size(); ++i)
+    int usedPds = 0;
+    for(int i = 0; i < m_jobs.size() && usedPds < m_pds.size(); ++i)
     {
-        if(jobs[i]->started && (!jobs[i]->done || jobs.size() - i <= pds.size() - used))
+        bool showThis = m_jobs[i]->started();
+        if(m_jobs[i]->done() && m_jobs.size() - i > m_pds.size() - usedPds)
+            showThis = false;
+        if(showThis)
         {
-            pds[used].pb->setValue(jobs[i]->percent());
-            pds[used].label->setText(QString::number(i + 1) + "  " + jobs[i]->info());
-            used++;
+            m_pds[usedPds].pb->setValue(m_jobs[i]->percent());
+            m_pds[usedPds].label->setText(QString::number(i + 1) + "  " + m_jobs[i]->info());
+            usedPds++;
         }
     }
     QCoreApplication::processEvents();
@@ -96,31 +103,31 @@ void ProgressDialog::updateProgress()
 
 void ProgressDialog::allDone()
 {
-    qDebug() << "All jobs done" << elapsedtimer.elapsed();
-    timer.stop();
+    qDebug() << "All jobs done" << m_elapsedTimer.elapsed();
+    m_timer.stop();
 
-    qint64 totalsize = 0;
+    qint64 totalSize = 0;
     QMap<QString, int>           hash2count;
     QMultiMap<QString, QString>  path2info;
     QHash<QString, qint64>       hash2size;
     QMultiHash<QString, QString> hash2path;
-    for(int i = 0; i < jobs.size(); ++i)
+    for(int i = 0; i < m_jobs.size(); ++i)
     {
-        qint64 size = jobs[i]->size;
-        QString hash = jobs[i]->hash;
-        QString name = jobs[i]->name();
-        QString method = (methodName ? jobs[i]->methodStr() + " " : "");
-        delete jobs[i];
+        qint64 size = m_jobs[i]->size();
+        QString hash = m_jobs[i]->hash();
+        QString name = m_jobs[i]->name();
+        QString method = (m_methodName ? m_jobs[i]->methodStr() + " " : "");
+        delete m_jobs[i];
 
-        if(methodName == false && name.endsWith("/desktop.ini")) // FIXME
+        if(m_methodName == false && name.endsWith("/desktop.ini")) // FIXME
         {
             if(hash == "418c4c275b3c0d70d93f046cd8c2a632121b6072c725bf4355b319fe6dc7b9cd") continue;
             if(hash == "7ba990a8886cdf4823cba7579d5e1f550d593e01aef15ebbd8d2b216e1c7d36d") continue;
             if(hash == "dfc6fa51dd38a197f4294d87357b2fe218377535d294d744924122761c03ca8f") continue;
         }
-        if(methodName == false && name.contains(".git/objects/")) continue; // TODO: add option
+        if(m_methodName == false && name.contains(".git/objects/")) continue; // TODO: add option
 
-        totalsize += size;
+        totalSize += size;
 
         QString info = method + hash + " " + QString::number(size);
         path2info.insertMulti(name, info);
@@ -150,9 +157,9 @@ void ProgressDialog::allDone()
                 QList<QString> pathlist = hash2path.values(hash2count_itr.key());
                 pathlist.sort();
                 foreach(QString path, pathlist) duplicates.append("\t" + path + "\n");
-                if(removeDups)
+                if(m_removeDups)
                 {
-                    DuplicateDialog dd(pathlist, dir, this);
+                    DuplicateDialog dd(pathlist, m_parentDir, this);
                     dd.exec();
                 }
             }
@@ -163,12 +170,12 @@ void ProgressDialog::allDone()
     result.append("Checksums by QtHashSum " APPVERSION "\n");
     result.append("https://github.com/fffaraz/QtHashSum\n");
     result.append("Generated at " + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "\n");
-    result.append(QString::number(jobs.size()) + " files hashed, " + QString::number(totalsize / 1048576) + " MB total\n");
+    result.append(QString::number(m_jobs.size()) + " files hashed, " + QString::number(totalSize / 1048576) + " MB total\n");
     if(num_duplicates > 0) result.append(QString::number(num_duplicates) + " duplicates found, " + QString::number(wasted / 1048576) + " MB wasted\n\n" + duplicates);
     result.append("\n");
     for(auto itr = path2info.constBegin(); itr != path2info.constEnd(); ++itr) result.append(itr.value() + " " + itr.key() + "\n");
 
-    qDebug() << "Result ready" << elapsedtimer.elapsed();
+    qDebug() << "Result ready" << m_elapsedTimer.elapsed();
 
     ResultDialog *rd = new ResultDialog(result);
     rd->show();

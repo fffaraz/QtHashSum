@@ -1,1 +1,28 @@
 https://github.com/jbruchon/jdupes
+
+// TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
+// TODO: sort duplicates by product of count x size
+// TODO: add none (or very fast: hash of size + first 1mb) to the list of hashing methods (list only)
+// TODO: add icon
+// TODO: add QElapsedTimer
+// TODO: https://github.com/Cyan4973/xxHash
+// TODO: https://github.com/cmuratori/meow_hash
+// TODO: ignore */desktop.ini, /.git/* in Create Digest tab
+// TODO: empty file/folder find & delete
+// TODO: restic save settings
+// TODO: restic combobox
+
+/*
+./QtHashSum -b [file]
+MD4       3123  3163
+MD5       4315  4415
+SHA1      4608  4660
+SHA3-224  6742  6898
+SHA3-256  7098  7306
+SHA3-384  9091  9287
+SHA3-512 12677 13065
+SHA512   12928 13217
+SHA384   13043 13183
+SHA256   17487 17458
+SHA224   17330 17501
+*/

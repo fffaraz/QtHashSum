@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,84 +14,95 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "filehasher.h"
 #include <QDebug>
 #include <QThread>
 #include <QFile>
 
-FileHasher::FileHasher(const QString &path, const Settings &settings) :
-    path(path), settings(settings)
+#include "filehasher.h"
+
+FileHasher::FileHasher(const QString &path, const FileHasherSettings &settings) :
+    m_path(path), m_settings(settings)
 {
     setAutoDelete(false);
-}
-
-FileHasher::~FileHasher()
-{
 }
 
 void FileHasher::run()
 {
     QThread::currentThread()->setPriority(QThread::LowPriority);
 
-    QFile file(path);
+    QFile file(m_path);
     if(!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
     {
-        started = done = true;
-        hash = "FILE_ERROR: " + file.errorString();
+        m_started = m_done = true;
+        m_hash = "FILE_ERROR: " + file.errorString();
         return;
     }
 
-    size = file.size();
-    if(size < 0)
+    m_size = file.size();
+    if(m_size < 0)
     {
-        started = done = true;
-        hash = "FILE_ERROR: size < 0";
+        m_started = m_done = true;
+        m_hash = "FILE_ERROR: size < 0";
         return;
     }
 
-    started = true;
+    m_started = true;
 
-    int buffer_size = 1 * 1024 * 1024; // TODO: settings
-    char *buffer = new char[static_cast<size_t>(buffer_size)];
+    int bufferSize = 1 * 1024 * 1024; // TODO: read from settings
+    char *buffer = new char[static_cast<size_t>(bufferSize)];
+
+    QCryptographicHash qch(m_settings.method());
     qint64 len = 0;
-
-    QCryptographicHash qch(settings.method);
-    while((len = file.read(buffer, buffer_size)) > 0)
+    while((len = file.read(buffer, bufferSize)) > 0)
     {
-        read += len;
+        m_read += len;
         qch.addData(buffer, static_cast<int>(len));
-        if(settings.max_read >= 0 && read >= settings.max_read) break;
+        if(m_settings.maxRead() >= 0 && m_read >= m_settings.maxRead()) break;
     }
-
-    hash = qch.result().toHex();
 
     delete[] buffer;
-    done = true;
-    //qDebug() << "FileHasher::run" << path << method << size << read << hash;
+    m_hash = qch.result().toHex();
+    m_done = true;
+    // qDebug() << "FileHasher::run" << path << method << size << read << hash;
 }
 
 int FileHasher::percent() const
 {
-    if(size < 1) return 0;
-    return static_cast<int>(100 * read / size);
+    if(m_size < 1) return 0;
+    return static_cast<int>(100 * m_read / m_size);
+}
+
+qint64 FileHasher::size() const
+{
+    return m_size;
 }
 
 QString FileHasher::info() const
 {
-    return settings.methodStr() + "  " + QString::number(size / 1048576) + " MB  " + name();
+    return m_settings.methodStr() + "  " + QString::number(m_size / 1048576) + " MB  " + name();
 }
 
 QString FileHasher::name() const
 {
-    return path.mid(settings.prefix_len);
+    return m_path.mid(m_settings.prefixLen());
+}
+
+QString FileHasher::hash() const
+{
+    return m_hash;
 }
 
 QString FileHasher::methodStr() const
 {
-    return settings.methodStr();
+    return m_settings.methodStr();
 }
 
-QString Settings::methodStr() const
+bool FileHasher::started() const
 {
-    return QVariant::fromValue(method).value<QString>().toUpper().replace('_', '-').replace("REALSHA", "SHA");
+    return m_started;
+}
+
+bool FileHasher::done() const
+{
+    return m_done;
 }

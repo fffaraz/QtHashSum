@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@ class DuplicateDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit DuplicateDialog(const QList<QString> &pathlist, QString dir, QWidget *parent = nullptr);
+    explicit DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent = nullptr);
     ~DuplicateDialog();
 
 private:
     Ui::DuplicateDialog *ui;
 
 private slots:
-    void remove_clicked();
+    void btnRemove_clicked();
 };

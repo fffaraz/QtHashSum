@@ -16,33 +16,20 @@
 
 #pragma once
 
-#include <QRunnable>
+#include <QCryptographicHash>
+#include <QString>
 
-#include "filehashersettings.h"
-
-class FileHasher : public QRunnable
+class FileHasherSettings final
 {
 public:
-    explicit FileHasher(const QString &path, const FileHasherSettings &settings);
-    virtual ~FileHasher() = default;
-    virtual void run();
-
-    int percent() const; //< (m_read / m_size) * 100
-    qint64 size() const; //< File size
-    QString info() const; //< "METHOD SIZE NAME"
-    QString name() const; //< File path without root dir
-    QString hash() const; //< Final result
-    QString methodStr() const; //< Hash method name
-    bool started() const;
-    bool done() const;
+    explicit FileHasherSettings(QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256, int prefixLen = 0);
+    QString methodStr() const;
+    inline QCryptographicHash::Algorithm method() const noexcept { return m_method; }
+    inline int prefixLen() const noexcept { return m_prefixLen; }
+    inline qint64 maxRead() const noexcept { return m_maxRead; }
 
 private:
-    QString m_path;
-    QString m_hash; // Final hash result
-    FileHasherSettings m_settings;
-
-    volatile bool m_started = false;
-    volatile bool m_done = false;
-    volatile qint64 m_size = 0;
-    volatile qint64 m_read = 0;
+    QCryptographicHash::Algorithm m_method;
+    int m_prefixLen; //< File path root directory length
+    qint64 m_maxRead = -1; //< File size read limit
 };

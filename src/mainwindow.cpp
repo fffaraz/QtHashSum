@@ -1,5 +1,5 @@
 // QtHashSum: File Checksum Integrity Verifier & Duplicate File Finder
-// Copyright (C) 2019  Faraz Fallahi <fffaraz@gmail.com>
+// Copyright (C) 2019-2020  Faraz Fallahi <fffaraz@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,10 +32,12 @@ MainWindow::MainWindow(Application *application, QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("QtHashSum " APPVERSION);
 
-    for(int i = 1; i <= application->maxThreadCount; ++i) ui->cmbThreads->addItem(QString::number(i));
+    for(int i = 1; i <= application->maxThreadCount(); ++i)
+        ui->cmbThreads->addItem(QString::number(i));
     ui->cmbThreads->setCurrentIndex(2);
 
-    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i) ui->cmbMethods->addItem(Settings(static_cast<QCryptographicHash::Algorithm>(i)).methodStr());
+    for(int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
+        ui->cmbMethods->addItem(FileHasherSettings(static_cast<QCryptographicHash::Algorithm>(i)).methodStr());
     ui->cmbMethods->setCurrentIndex(QCryptographicHash::Sha3_256);
 }
 
@@ -44,7 +46,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_btnBrowse_clicked()
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event)
+    QCoreApplication::quit();
+}
+
+void MainWindow::on_btnBrowseFile_clicked()
 {
     ui->txtFile->setText(QFileDialog::getOpenFileName(this));
 }
@@ -59,7 +67,7 @@ void MainWindow::on_cmbThreads_currentIndexChanged(const QString &arg1)
     application->setMaxThreadCount(arg1.toInt());
 }
 
-void MainWindow::on_btnStart_clicked()
+void MainWindow::on_btnStartFile_clicked()
 {
     QVector<QCryptographicHash::Algorithm> methods;
     if(ui->chkMD5->isChecked()) methods.append(QCryptographicHash::Md5);
@@ -73,13 +81,10 @@ void MainWindow::on_btnStart_clicked()
     QFileInfo file(ui->txtFile->text());
     if(!file.exists()) return;
 
-    Settings settings;
-    settings.prefix_len = file.absolutePath().size();
-
     QVector<FileHasher*> jobs;
-    foreach(QCryptographicHash::Algorithm method, methods)
+    for (QCryptographicHash::Algorithm method : methods)
     {
-        settings.method = method;
+        FileHasherSettings settings(method, file.absolutePath().size());
         jobs.append(new FileHasher(file.absoluteFilePath(), settings));
     }
 
@@ -98,21 +103,13 @@ void MainWindow::on_btnStartDir_clicked()
     pd->show();
 }
 
-QProcessEnvironment MainWindow::getResticEnv()
+QProcessEnvironment MainWindow::getResticEnv() const
 {
-    QProcessEnvironment sysenv = QProcessEnvironment::systemEnvironment();
-    QProcessEnvironment env;
-    env.insert("TMP", sysenv.value("TMP")); // https://golang.org/pkg/os/#TempDir
-    env.insert("LOCALAPPDATA", sysenv.value("LOCALAPPDATA"));
-    env.insert("B2_ACCOUNT_ID", ui->txtResticB2ID->text());
-    env.insert("B2_ACCOUNT_KEY", ui->txtResticB2Key->text());
-    env.insert("RESTIC_REPOSITORY", ui->txtResticRepo->text());
-    env.insert("RESTIC_PASSWORD", ui->txtResticPassword->text());
-    // AWS_ACCESS_KEY_ID
-    // AWS_SECRET_ACCESS_KEY
-    // s3:s3.wasabisys.com/my-backup-bucket
-    // b2:bucket:folder
-    return env;
+    return application->getResticEnv(
+                ui->txtResticB2ID->text(),
+                ui->txtResticB2Key->text(),
+                ui->txtResticRepo->text(),
+                ui->txtResticPassword->text());
 }
 
 void MainWindow::on_btnResticInit_clicked()

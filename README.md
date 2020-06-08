@@ -9,7 +9,7 @@ File Checksum Integrity Verifier & Duplicate File Finder written in C++ Qt
 ```
 git clone https://github.com/fffaraz/QtHashSum.git
 cd QtHashSum/docker
-docker build --rm --no-cache -t fffaraz/qthashsum .
+docker build --force-rm -t fffaraz/qthashsum .
 docker run --rm -i -v $(pwd):/data fffaraz/qthashsum .
 ```
 
