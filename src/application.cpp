@@ -192,7 +192,8 @@ QString Application::removeDups(const QVector<FileHasher *> &jobsOrig, const QVe
         if(hash2path.contains(jobsDup[i]->hash()))
         {
             result.append("del /f \""); // TODO: rm -f
-            result.append(parentDir + jobsDup[i]->name());
+            QString path = parentDir + jobsDup[i]->name();
+            result.append(path.replace('/', '\\')); // TODO: win only
             result.append("\"\n");
         }
     }
