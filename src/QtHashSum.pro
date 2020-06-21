@@ -34,6 +34,7 @@ SOURCES += \
     filehashersettings.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindow_restic.cpp \
     progressdialog.cpp \
     resticdialog.cpp \
     resultdialog.cpp

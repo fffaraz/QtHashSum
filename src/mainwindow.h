@@ -50,6 +50,9 @@ class MainWindow : public QMainWindow
     void on_btnResticRestore_clicked();
     void on_btnResticForget_clicked();
     void on_btnResticPrune_clicked();
+    void on_btnBrowseOrig_clicked();
+    void on_btnBrowseDup_clicked();
+    void on_btnStartDup_clicked();
 
   private:
     Ui::MainWindow *ui = nullptr;
