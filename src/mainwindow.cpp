@@ -22,6 +22,7 @@
 
 #include "filehasher.h"
 #include "progressdialog.h"
+#include "resultdialog.h"
 
 MainWindow::MainWindow(Application *application, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), application(application)
@@ -93,8 +94,13 @@ void MainWindow::on_btnStartFile_clicked()
         jobs.append(new FileHasher(file.absoluteFilePath(), settings));
     }
 
-    ProgressDialog *pd = new ProgressDialog(jobs, "", true, false, "", this);
-    pd->show();
+    ProgressDialog *pd = new ProgressDialog(jobs, this);
+    pd->exec();
+
+    QString result = Application::getResult(jobs, "", true, false);
+
+    ResultDialog *rd = new ResultDialog(result);
+    rd->show();
 }
 
 void MainWindow::on_btnStartDir_clicked()
@@ -103,12 +109,17 @@ void MainWindow::on_btnStartDir_clicked()
     if (dir.size() < 1)
         return;
 
-    QVector<FileHasher *> jobs =
-        application->parseDir(dir, static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex()));
+    auto hashAlgo = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
+    QVector<FileHasher *> jobs = application->parseDir(dir, hashAlgo);
 
-    ProgressDialog *pd =
-        new ProgressDialog(jobs, dir, false, ui->chkDuplicates->isChecked(), ui->cmbFormats->currentText(), this);
-    pd->show();
+    ProgressDialog *pd = new ProgressDialog(jobs, this);
+    pd->exec();
+
+    // TODO: ui->cmbFormats->currentText()
+    QString result = Application::getResult(jobs, dir, false, ui->chkDuplicates->isChecked());
+
+    ResultDialog *rd = new ResultDialog(result);
+    rd->show();
 }
 
 void MainWindow::on_btnBrowseOrig_clicked()
@@ -123,5 +134,28 @@ void MainWindow::on_btnBrowseDup_clicked()
 
 void MainWindow::on_btnStartDup_clicked()
 {
+    QString dirOrig = ui->txtDirOrig->text();
+    if (dirOrig.size() < 1)
+        return;
 
+    QString dirDup = ui->txtDirDup->text();
+    if (dirDup.size() < 1)
+        return;
+
+    auto hashAlgo = QCryptographicHash::Algorithm::Md4;
+
+    qDebug() << "Listing Original Directory";
+    QVector<FileHasher *> jobsOrig = application->parseDir(dirOrig, hashAlgo);
+    ProgressDialog *pd1 = new ProgressDialog(jobsOrig, this);
+    pd1->exec();
+
+    qDebug() << "Listing Duplicate Directory";
+    QVector<FileHasher *> jobsDup = application->parseDir(dirDup, hashAlgo);
+    ProgressDialog *pd2 = new ProgressDialog(jobsDup, this);
+    pd2->exec();
+
+    QString result = Application::removeDups(jobsOrig, jobsDup, dirDup);
+
+    ResultDialog *rd = new ResultDialog(result);
+    rd->show();
 }

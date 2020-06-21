@@ -28,7 +28,7 @@ class ResultDialog : public QDialog
     Q_OBJECT
 
   public:
-    explicit ResultDialog(QString result, QWidget *parent = nullptr);
+    explicit ResultDialog(const QString &result, QWidget *parent = nullptr);
     ~ResultDialog();
 
   private:
