@@ -25,7 +25,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-DuplicateDialog::DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent)
+DuplicateDialog::DuplicateDialog(const QStringList &pathList, QString parentDir, QWidget *parent)
     : QDialog(parent), ui(new Ui::DuplicateDialog)
 {
     ui->setupUi(this);
@@ -70,23 +70,18 @@ DuplicateDialog::~DuplicateDialog()
     delete ui;
 }
 
+QStringList DuplicateDialog::selectedList()
+{
+    return m_selectedList;
+}
+
 void DuplicateDialog::btnRemove_clicked()
 {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (button != nullptr)
     {
-        QFile file(button->statusTip());
-        qDebug() << "Removed" << file.fileName() << file.size();
-        if (file.exists())
-        {
-            bool ok = file.remove();
-            if (!ok)
-                QMessageBox::warning(this, "", "Remove failed!");
-        }
-        else
-        {
-            QMessageBox::warning(this, "", "File not found!");
-        }
+        // TODO: select multiple duplicate files if pathList.size() > 2
+        m_selectedList.append(button->statusTip());
     }
     this->accept();
 }

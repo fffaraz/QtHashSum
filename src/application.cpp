@@ -133,6 +133,7 @@ QString Application::getResult(const QVector<FileHasher *> &jobs, QString parent
     }
 
     QString duplicates;
+    QStringList duplicatesDelete;
     int num_duplicates = 0;
     qint64 wasted = 0;
     const int min_size[] = {1000, 100, 10, 1, 0};
@@ -156,6 +157,7 @@ QString Application::getResult(const QVector<FileHasher *> &jobs, QString parent
                 {
                     DuplicateDialog dd(pathlist, parentDir, nullptr);
                     dd.exec();
+                    duplicatesDelete.append(dd.selectedList());
                 }
             }
         }
@@ -174,6 +176,18 @@ QString Application::getResult(const QVector<FileHasher *> &jobs, QString parent
     result.append("\n");
     for (auto itr = path2info.constBegin(); itr != path2info.constEnd(); ++itr)
         result.append(itr.value() + " " + itr.key() + "\n");
+
+    if (duplicatesDelete.size() > 0)
+    {
+        result.append("\n");
+        for (QString item : duplicatesDelete)
+        {
+            result.append("del /f \""); // TODO: rm -f
+            result.append(item.replace('/', '\\')); // TODO: win only
+            result.append("\"\n");
+        }
+        result.append("\n");
+    }
 
     return result;
 }

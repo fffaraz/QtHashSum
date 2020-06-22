@@ -32,7 +32,7 @@ MainWindow::MainWindow(Application *application, QWidget *parent)
 
     for (int i = 1; i <= application->maxThreadCount(); ++i)
         ui->cmbThreads->addItem(QString::number(i));
-    ui->cmbThreads->setCurrentIndex(2);
+    ui->cmbThreads->setCurrentIndex(3);
 
     for (int i = QCryptographicHash::Md4; i != QCryptographicHash::Sha3_512 + 1; ++i)
         ui->cmbMethods->addItem(FileHasherSettings(static_cast<QCryptographicHash::Algorithm>(i)).methodStr());

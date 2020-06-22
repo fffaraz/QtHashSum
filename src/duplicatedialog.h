@@ -28,11 +28,13 @@ class DuplicateDialog : public QDialog
     Q_OBJECT
 
   public:
-    explicit DuplicateDialog(const QList<QString> &pathList, QString parentDir, QWidget *parent = nullptr);
+    explicit DuplicateDialog(const QStringList &pathList, QString parentDir, QWidget *parent = nullptr);
     ~DuplicateDialog();
+    QStringList selectedList();
 
   private:
     Ui::DuplicateDialog *ui;
+    QStringList m_selectedList;
 
   private slots:
     void btnRemove_clicked();
