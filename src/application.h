@@ -29,7 +29,7 @@ class Application
 
     static QVector<FileHasher *> parseDir(QString dir, QCryptographicHash::Algorithm method);
     static QProcessEnvironment getResticEnv(QString b2id, QString b2key, QString repo, QString pass);
-    static QString getResult(const QVector<FileHasher *> &jobs, QString parentDir, bool methodName, bool removeDups);
+    static QString getResult(const QVector<FileHasher *> &jobs, QString parentDir, bool includeMethod, bool removeDups);
     static QString removeDups(const QVector<FileHasher *> &jobsOrig, const QVector<FileHasher *> &jobsDup, QString parentDir);
 
   private:
