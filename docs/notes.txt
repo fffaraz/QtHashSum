@@ -11,6 +11,8 @@ https://github.com/jbruchon/jdupes
 // TODO: empty file/folder find & delete
 // TODO: restic save settings
 // TODO: restic combobox
+// TODO: write to file, verify content
+
 
 /*
 ./QtHashSum -b [file]
