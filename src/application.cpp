@@ -30,7 +30,12 @@ Application::Application()
 
 QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Algorithm method)
 {
-    FileHasherSettings settings(method, dir.size());
+    qint64 maxRead = -1;
+    if (method == QCryptographicHash::Algorithm::Md4)
+    {
+        maxRead = 10 * 1024 * 1024; // TODO: get from GUI
+    }
+    const FileHasherSettings settings{method, dir.size(), maxRead};
 
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;

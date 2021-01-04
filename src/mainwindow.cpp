@@ -109,7 +109,7 @@ void MainWindow::on_btnStartDir_clicked()
     if (dir.size() < 1)
         return;
 
-    auto hashAlgo = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
+    const auto hashAlgo = static_cast<QCryptographicHash::Algorithm>(ui->cmbMethods->currentIndex());
     QVector<FileHasher *> jobs = application->parseDir(dir, hashAlgo);
 
     ProgressDialog *pd = new ProgressDialog(jobs, this);
@@ -142,7 +142,7 @@ void MainWindow::on_btnStartDup_clicked()
     if (dirDup.size() < 1)
         return;
 
-    auto hashAlgo = QCryptographicHash::Algorithm::Md4;
+    const auto hashAlgo = QCryptographicHash::Algorithm::Md4;
 
     qDebug() << "Listing Original Directory";
     QVector<FileHasher *> jobsOrig = application->parseDir(dirOrig, hashAlgo);

@@ -22,7 +22,7 @@
 class FileHasherSettings final
 {
   public:
-    explicit FileHasherSettings(QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256, int prefixLen = 0);
+    explicit FileHasherSettings(QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256, int prefixLen = 0, qint64 maxRead = -1);
     QString methodStr() const;
     inline QCryptographicHash::Algorithm method() const noexcept
     {

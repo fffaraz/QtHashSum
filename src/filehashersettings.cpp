@@ -2,8 +2,8 @@
 
 #include "filehashersettings.h"
 
-FileHasherSettings::FileHasherSettings(QCryptographicHash::Algorithm method, int prefixLen)
-    : m_method{method}, m_prefixLen(prefixLen)
+FileHasherSettings::FileHasherSettings(QCryptographicHash::Algorithm method, int prefixLen, qint64 maxRead)
+    : m_method{method}, m_prefixLen{prefixLen}, m_maxRead{maxRead}
 {
 }
 
