@@ -22,7 +22,9 @@
 class FileHasherSettings final
 {
   public:
-    explicit FileHasherSettings(QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256, int prefixLen = 0, qint64 maxRead = -1);
+    explicit FileHasherSettings(QCryptographicHash::Algorithm method = QCryptographicHash::Sha3_256,
+                                int prefixLen = 0, qint64 maxRead = -1);
+
     QString methodStr() const;
     inline QCryptographicHash::Algorithm method() const noexcept
     {
@@ -36,9 +38,14 @@ class FileHasherSettings final
     {
         return m_maxRead;
     }
+    inline int bufferSize() const noexcept
+    {
+        return m_bufferSize;
+    }
 
   private:
     QCryptographicHash::Algorithm m_method;
     int m_prefixLen;       //< File path root directory length
-    qint64 m_maxRead = -1; //< File size read limit
+    qint64 m_maxRead = -1; //< File size read limit in bytes
+    int m_bufferSize = 1 * 1024 * 1024; //< File read chunk size in bytes
 };

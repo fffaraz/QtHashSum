@@ -16,6 +16,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QFileInfo>
 #include <QThread>
 
 #include "filehasher.h"
@@ -27,7 +28,14 @@ FileHasher::FileHasher(const QString &path, const FileHasherSettings &settings) 
 
 void FileHasher::run()
 {
-    QThread::currentThread()->setPriority(QThread::LowPriority);
+    if (m_settings.maxRead() < 1)
+    {
+        m_hash = QCryptographicHash::hash(m_path.toUtf8(), m_settings.method()).toHex();
+        QFileInfo info(m_path);
+        m_size = info.size();
+        m_started = m_done = true;
+        return;
+    }
 
     QFile file(m_path);
     if (!file.exists() || !file.open(QFile::ReadOnly) || !file.isOpen() || !file.isReadable())
@@ -45,9 +53,10 @@ void FileHasher::run()
         return;
     }
 
+    QThread::currentThread()->setPriority(QThread::LowPriority);
     m_started = true;
 
-    int bufferSize = 1 * 1024 * 1024; // TODO: read from settings
+    const int bufferSize = m_settings.bufferSize();
     char *buffer = new char[static_cast<size_t>(bufferSize)];
 
     QCryptographicHash qch(m_settings.method());
@@ -69,7 +78,9 @@ void FileHasher::run()
 int FileHasher::percent() const
 {
     if (m_size < 1)
+    {
         return 0;
+    }
     return static_cast<int>(100 * m_read / m_size);
 }
 

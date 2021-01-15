@@ -34,6 +34,7 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
     if (method == QCryptographicHash::Algorithm::Md4)
     {
         maxRead = 10 * 1024 * 1024; // TODO: get from GUI
+        maxRead = 0;
     }
     const FileHasherSettings settings{method, dir.size(), maxRead};
 
