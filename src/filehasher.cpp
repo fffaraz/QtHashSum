@@ -28,7 +28,7 @@ FileHasher::FileHasher(const QString &path, const FileHasherSettings &settings) 
 
 void FileHasher::run()
 {
-    if (m_settings.maxRead() < 1)
+    if (m_settings.maxRead() == 0)
     {
         m_hash = QCryptographicHash::hash(m_path.toUtf8(), m_settings.method()).toHex();
         QFileInfo info(m_path);
