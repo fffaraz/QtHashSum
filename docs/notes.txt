@@ -1,4 +1,5 @@
 https://github.com/jbruchon/jdupes
+https://github.com/tedsmith/quickhash
 
 // TODO: cancel operation -> void QThreadPool::cancel(QRunnable * runnable)
 // TODO: sort duplicates by product of count x size
