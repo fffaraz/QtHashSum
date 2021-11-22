@@ -29,3 +29,11 @@ SHA384   13043 13183
 SHA256   17487 17458
 SHA224   17330 17501
 */
+
+https://github.com/qarmin/czkawka
+https://github.com/andmarios/duphard
+https://github.com/sahib/rmlint
+https://github.com/adrianlopezroche/fdupes
+https://github.com/pkolaczk/fclones
+https://github.com/pauldreik/rdfind
+https://github.com/m-manu/go-find-duplicates
