@@ -36,7 +36,7 @@ QVector<FileHasher *> Application::parseDir(QString dir, QCryptographicHash::Alg
         maxRead = 10 * 1024 * 1024; // TODO: get from GUI
         maxRead = 0;
     }
-    const FileHasherSettings settings{method, dir.size(), maxRead};
+    const FileHasherSettings settings{method, static_cast<int>(dir.size()), maxRead};
 
     QDirIterator itr(dir, QDir::AllEntries | QDir::Hidden | QDir::System, QDirIterator::Subdirectories);
     int items = 0;
@@ -130,10 +130,10 @@ QString Application::getResult(const QVector<FileHasher *> &jobs, QString parent
         totalSize += size;
 
         QString info = method + hash + " " + QString::number(size);
-        path2info.insertMulti(name, info);
+        path2info.insert(name, info);
 
         hash2count[hash] = hash2count[hash] + 1;
-        hash2path.insertMulti(hash, name);
+        hash2path.insert(hash, name);
 
         if (!hash2size.contains(hash))
             hash2size.insert(hash, size);
@@ -211,7 +211,7 @@ QString Application::removeDups(const QVector<FileHasher *> &jobsOrig, const QVe
     QMultiHash<QString, QString> hash2path;
     for (int i = 0; i < jobsOrig.size(); ++i)
     {
-        hash2path.insertMulti(jobsOrig[i]->hash(), jobsOrig[i]->name());
+        hash2path.insert(jobsOrig[i]->hash(), jobsOrig[i]->name());
     }
     QString result;
     result.reserve(jobsDup.size() * 4096);
